@@ -52,6 +52,22 @@ class ReservationController extends Controller
         return view('dashboard.reservations.show', compact('reservations'));
     }
 
+
+// UPdate status
+    public function updateStatus(Request $request, string $id)
+    {
+        $validatedData = $request->validate([
+            'status' => 'required|string|in:pending,accepted,rejected',
+        ]);
+
+        // Find the reservation and update it
+        $reservation = Reservation::find($id);  
+        $reservation->update($validatedData);
+
+        // Redirect back with success message
+        return redirect()->route('reservation.show')->with('success', 'Reservation status updated successfully.');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -66,7 +82,24 @@ class ReservationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        // Validate the request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'message' => 'required|string|max:1000',
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+            'persons' => 'required|integer|min:1',
+        ]);
+
+        // Find the reservation and update it
+        $reservation = Reservation::find($id);
+        $reservation->update($validatedData);
+
+        // Redirect back with success message
+        return redirect()->route('reservation.show')->with('success', 'Reservation updated successfully.');
     }
 
     /**
@@ -74,6 +107,9 @@ class ReservationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $reservation = Reservation::find($id);
+        $reservation->delete();
+
+        return redirect()->route('reservation.show')->with('success', 'Reservation deleted successfully!');
     }
 }

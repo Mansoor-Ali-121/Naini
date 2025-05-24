@@ -6,10 +6,10 @@
     <div class="card shadow-lg" style="font-family: 'Poppins', sans-serif; border-radius: 15px;">
         <!-- Header -->
         <div class="card-header d-flex justify-content-between align-items-center py-3" style="
-                    background: linear-gradient(45deg, #2c3e50, #3498db);
-                    border-radius: 15px 15px 0 0;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-                 ">
+                        background: linear-gradient(45deg, #2c3e50, #3498db);
+                        border-radius: 15px 15px 0 0;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                     ">
             <h4 class="mb-0 text-white" style="font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
                 📅 Reservations
             </h4>
@@ -44,8 +44,7 @@
                                 <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Date & Time</th>
                                 <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Persons</th>
                                 <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Status</th>
-                                <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Accept Status</th>
-                                <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Decline Status</th>
+                                <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Status Decision</th>
                                 <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Actions</th>
                             </tr>
                         </thead>
@@ -80,29 +79,38 @@
                                     </td>
                                     <td class="text-center">
                                         <span
-                                            class="badge {{ $reservation->status == 'confirmed' ? 'bg-success' : 'bg-warning' }} rounded-pill px-3 py-2">
+                                            class="badge {{ $reservation->status == 'confirmed' ? 'bg-success' : ($reservation->status == 'declined' ? 'bg-danger' : 'bg-warning') }} rounded-pill px-3 py-2">
                                             {{ $reservation->status }}
                                         </span>
                                     </td>
-                                    {{-- Accept button --}}
+
+                                    {{-- Accept/Decline buttons --}}
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <a href="" class="btn btn-sm btn-success rounded-pill px-3" data-bs-toggle="tooltip"
-                                                title="Accept Reservation">
-                                                <i class="bi bi-check-circle"></i> Accept
-                                            </a>
+                                            <form action="{{ route('reservation.update-status', $reservation) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" name="status" value="confirmed"
+                                                    class="btn btn-sm btn-success rounded-pill px-3" data-bs-toggle="tooltip"
+                                                    title="Accept Reservation">
+                                                    <i class="bi bi-check-circle"></i> Accept
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('reservation.update-status', $reservation) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" name="status" value="declined"
+                                                    class="btn btn-sm btn-danger rounded-pill px-3" data-bs-toggle="tooltip"
+                                                    title="Decline Reservation">
+                                                    <i class="bi bi-x-circle"></i> Decline
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
 
-                                    {{-- Decline button --}}
-                                    <td class="text-center">
-                                        <div class="d-flex gap-2 justify-content-center">
-                                            <a href="" class="btn btn-sm btn-danger rounded-pill px-3" data-bs-toggle="tooltip"
-                                                title="Decline Reservation">
-                                                <i class="bi bi-x-circle"></i> Decline
-                                            </a>
-                                        </div>
-                                    </td>
                                     {{-- Actions --}}
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
@@ -166,6 +174,7 @@
     </style>
 
     <script>
+        // Initialize tooltips
         document.addEventListener('DOMContentLoaded', function () {
             [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
                 .forEach(function (tooltipTriggerEl) {

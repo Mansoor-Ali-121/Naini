@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthContrller;
+use App\Http\Controllers\AuthController;
 use App\Models\Chefs;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
@@ -44,7 +46,7 @@ Route::put('/chef/update/{id}', [ChefsController::class, 'update'])->name('chef.
 Route::delete('/chef/delete/{id}', [ChefsController::class, 'destroy'])->name('chef.delete');
 
 // Events-Routes
-Route::prefix('events')->group( function () {
+Route::prefix('events')->group(function () {
 
     Route::get('/add', [EventsController::class, 'index'])->name('events.add');
     Route::post('/add', [EventsController::class, 'store']);
@@ -56,19 +58,19 @@ Route::prefix('events')->group( function () {
 
 // Gallery-Routes 
 
-Route::prefix('gallery')->group(function(){
+Route::prefix('gallery')->group(function () {
 
     Route::get('/add', [GalleryController::class, 'index'])->name('gallery.add');
-    Route::post('/add', [GalleryController::class,'store']);
+    Route::post('/add', [GalleryController::class, 'store']);
     Route::get('/show', [GalleryController::class, 'show'])->name('gallery.show');
-    Route::get('/edit/{id}', [GalleryController::class,'edit'])->name('gallery.edit');
-    Route::patch('/update/{id}', [GalleryController::class,'update'])->name('gallery.update');;
+    Route::get('/edit/{id}', [GalleryController::class, 'edit'])->name('gallery.edit');
+    Route::patch('/update/{id}', [GalleryController::class, 'update'])->name('gallery.update');;
     Route::delete('/delete/{id}', [GalleryController::class, 'destroy'])->name('gallery.delete');
 });
 
 // Reservation-Routes
 
-Route::prefix('reservation')->group(function(){
+Route::prefix('reservation')->group(function () {
 
     Route::get('/add', [ReservationController::class, 'index'])->name('reservation.add');
     Route::post('/add', [ReservationController::class, 'store']);
@@ -76,6 +78,8 @@ Route::prefix('reservation')->group(function(){
     Route::get('/edit/{id}', [ReservationController::class, 'edit'])->name('reservation.edit');
     Route::patch('/update/{id}', [ReservationController::class, 'update'])->name('reservation.update');
     Route::delete('/delete/{id}', [ReservationController::class, 'destroy'])->name('reservation.delete');
+
+    Route::patch('/updateStatus/{id}', [ReservationController::class, 'updateStatus'])->name('reservation.update-status');
 });
 
 // Website routes
@@ -90,7 +94,7 @@ Route::get('/web/about', [WebController::class, 'about'])->name('about');
 
 // Contacts routes
 
-Route::prefix('contacts')->group(function(){
+Route::prefix('contacts')->group(function () {
 
     Route::get('/add', [ContactsController::class, 'index'])->name('contacts.add');
     Route::post('/add', [ContactsController::class, 'store']);
@@ -98,5 +102,21 @@ Route::prefix('contacts')->group(function(){
     Route::get('/edit/{id}', [ContactsController::class, 'edit'])->name('contacts.edit');
     Route::patch('/update/{id}', [ContactsController::class, 'update'])->name('contacts.update');
     Route::delete('/delete/{id}', [ContactsController::class, 'destroy'])->name('contacts.delete');
-
 });
+
+// Authentication routes
+
+// Register form
+
+Route::get('/register', [AuthController::class, 'index'])->name('register.add');
+Route::post('/register', [AuthController::class, 'store']);
+Route::get('/register/show', [AuthController::class, 'forgetPassword'])->name('.add');
+Route::post('/register/edit{id}', [AuthController::class, 'sendResetLinkEmail']);
+Route::get('/register/update/{id}', [AuthController::class, 'resetPassword'])->name('reset-password.add');
+Route::post('/register/delete/{id}', [AuthController::class, 'updatePassword']);
+
+// Login routes
+
+Route::get('/login', [AuthController::class, 'login'])->name('login.add');
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout.add');

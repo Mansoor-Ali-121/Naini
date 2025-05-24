@@ -39,9 +39,9 @@
             @endif
 
             <!-- Edit Reservation Form -->
-            <form action="" method="POST">
+            <form action="{{route('reservation.update', $reservations->id)}}" method="POST">
                 @csrf
-                @method('PUT')
+                @method('PATCH')
                 <div class="row gy-4">
                     <!-- Name Field -->
                     <div class="col-md-6">
