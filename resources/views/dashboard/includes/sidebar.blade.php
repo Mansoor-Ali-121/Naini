@@ -144,8 +144,8 @@
                     <i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="">View Users</a></li>
-                    <li><a class="dropdown-item" href="">Add User</a></li>
+                    <li><a class="dropdown-item" href="{{route('register.show')}}">View Users</a></li>
+                    <li><a class="dropdown-item" href="{{route('register.add')}}">Add User</a></li>
                 </ul>
             </li>
 

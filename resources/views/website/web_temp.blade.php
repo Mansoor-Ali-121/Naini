@@ -49,7 +49,7 @@
           <li><a href="{{route('chefs')}}">Chefs</a></li>
           <li><a href="{{route('gallery')}}">Gallery</a></li>
           {{-- <li><a href="{{route('Signup')}}">Sign Up</a></li> --}}
-          <li><a href="{{route('register.add')}}">Login</a></li>
+          <li><a href="{{route('login.add')}}">Login</a></li>
           <li><a href="{{route('contacts.add')}}">Contact</a></li>
           
         </ul>

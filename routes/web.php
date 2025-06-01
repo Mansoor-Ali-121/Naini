@@ -35,7 +35,6 @@ Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('ca
 Route::patch('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
 
-
 // Chefs-Routes
 
 Route::get('/chef/add', [ChefsController::class, 'index'])->name('chef.add');
@@ -89,7 +88,6 @@ Route::get('/web/menu', [WebController::class, 'menu'])->name('menu');
 Route::get('/web/chefs', [WebController::class, 'chefs'])->name('chefs');
 Route::get('/web/events', [WebController::class, 'events'])->name('events');
 Route::get('/web/gallery', [WebController::class, 'gallery'])->name('gallery');
-// Route::get('/web/contact', [WebController::class, 'contacts'])->name('contacts');
 Route::get('/web/about', [WebController::class, 'about'])->name('about');
 
 // Contacts routes
@@ -108,15 +106,15 @@ Route::prefix('contacts')->group(function () {
 
 // Register form
 
-Route::get('/register', [AuthController::class, 'index'])->name('register.add');
-Route::post('/register', [AuthController::class, 'store']);
-Route::get('/register/show', [AuthController::class, 'forgetPassword'])->name('.add');
-Route::post('/register/edit{id}', [AuthController::class, 'sendResetLinkEmail']);
-Route::get('/register/update/{id}', [AuthController::class, 'resetPassword'])->name('reset-password.add');
-Route::post('/register/delete/{id}', [AuthController::class, 'updatePassword']);
+Route::get('/register/add', [AuthController::class, 'register'])->name('register.add');
+Route::post('/register/add', [AuthController::class, 'store']);
+Route::get('/register/show', [AuthController::class, 'show'])->name('register.show');
+Route::get('/register/edit{id}', [AuthController::class, 'edit'])->name('register.edit');
+Route::patch('/register/update/{id}', [AuthController::class, 'update'])->name('register.update');
+Route::delete('/register/delete/{id}', [AuthController::class, 'delete'])->name('register.delete');
 
 // Login routes
 
-Route::get('/login', [AuthController::class, 'login'])->name('login.add');
+Route::get('/login', [AuthController::class, 'loginform'])->name('login.add');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout.add');
