@@ -1,5 +1,24 @@
 @extends('website.web_temp')
 @section('main_website')
+
+{{-- Error handling --}}
+
+@if(session('success'))
+    <div style="background:green; color:white; padding:10px;">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if($errors->any())
+    <div style="background:red; color:white; padding:10px;">
+        @foreach($errors->all() as $error)
+            {{ $error }}<br>
+        @endforeach
+    </div>
+@endif
+{{-- Error handling end--}}
+
+
     <div class="container-fluid vh-90"
         style="background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center fixed; background-size: cover;">
         <div class="row justify-content-center align-items-center h-100">
@@ -139,7 +158,7 @@
                             <div class="text-center mb-3">
                                 <p class="text-muted mb-2">Or register with</p>
                                 <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="btn btn-outline-danger rounded-circle p-2">
+                                    <a href="" class="btn btn-outline-danger rounded-circle p-2">
                                         <i class="bi bi-facebook"></i>
                                     </a>
                                     <a href="#" class="btn btn-outline-danger rounded-circle p-2">
@@ -155,7 +174,7 @@
                         <!-- Login Link -->
                         <div class="text-center pt-3 border-top">
                             <p class="mb-0">Already have an account?
-                                <a href="#" class="fw-bold text-decoration-none text-danger">Login here</a>
+                                <a href="{{route('login.add')}}" class="fw-bold text-decoration-none text-danger">Login here</a>
                             </p>
                         </div>
                     </div>

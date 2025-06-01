@@ -1,13 +1,21 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <!-- User Info Section -->
-        <div class="user-info text-center py-4">
-            <div class="profile-pic-container">
-                <img src="" class="profile-pic rounded-circle shadow" alt="">
-            </div>
-
-            <h2 class="user-role fancy-text">Admin</h2>
-        </div>
+     <div class="user-info text-center py-4">
+    <div class="profile-pic-container">
+        @auth
+            <img src="{{ Auth::user()->picture ? asset('Users/users_pictures/' . Auth::user()->picture) : asset('default-user.png') }}" 
+                 class="profile-pic rounded-circle shadow" 
+                 alt="Admin Profile"
+                 onerror="this.src='{{ asset('default-user.png') }}'">
+        @else
+            <img src="{{ asset('default-user.png') }}" 
+                 class="profile-pic rounded-circle shadow" 
+                 alt="Default Profile">
+        @endauth
+    </div>
+    <h2 class="user-role fancy-text">Admin</h2>
+</div>
 
         <!-- Add the following CSS for styling -->
         <style>
@@ -125,13 +133,13 @@
 
         <ul class="sidebar-nav">
             <li class="sidebar-item">
-                <a class="sidebar-link" href="">
+                <a class="sidebar-link" href="{{route('dashboard')}}">
                     <i class="align-middle" data-feather="activity"></i> <span class="align-middle">Dashboard</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="">
+                <a class="sidebar-link" href="{{route('admin.dashboard')}}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
                 </a>
             </li>
@@ -254,7 +262,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link text-danger" href="">
+                <a class="sidebar-link text-danger" href="{{route('logout')}}">
                     <i class="align-middle" data-feather="power"></i> <span class="align-middle">Logout</span>
                 </a>
             </li>

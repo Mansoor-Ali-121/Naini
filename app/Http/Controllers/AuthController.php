@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -47,8 +48,15 @@ class AuthController extends Controller
             $file->move(public_path('Users/users_pictures'), $fileName);
             $ValidateData['picture'] = $fileName;
         }
+
+        // Create user and check if successful
         $user = User::create($ValidateData);
-        return redirect()->route('login.add')->with('success', 'User created successfully!');
+
+        if ($user) {
+            return redirect()->route('login.add')->with('success', 'User created successfully!');
+        }
+        return redirect()->back()->with('failure', 'Failed to create user'); // Simple error message
+
     }
     /**
      * Display the specified resource.
@@ -116,15 +124,15 @@ class AuthController extends Controller
         //
         $user = User::find($id);
 
-                // Delete old image if it exists
-        if ($user->chef_picture && file_exists(public_path('Users/users_pictures' . $user->picture))
+        // Delete old image if it exists
+        if (
+            $user->chef_picture && file_exists(public_path('Users/users_pictures' . $user->picture))
         ) {
             unlink(public_path('Users/users_pictures' . $user->picture));
         }
 
         $user->delete();
         return redirect()->route('register.show')->with('success', 'User deleted successfully');
-
     }
 
     /**
@@ -133,5 +141,54 @@ class AuthController extends Controller
     public function loginform()
     {
         return view('dashboard.auth.login');
+    }
+
+    // Authentication _ Login
+    public function authentication(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();  // Important security measure
+
+            if (Auth::user()->usertype == 'admin') {
+                return redirect()->route('dashboard');  // Use named route
+            }
+            return redirect()->route('website');  // Standard user redirect
+        }
+
+        return back()->withErrors([
+            'email' => 'Invalid credentials',  // More secure error message
+        ])->onlyInput('email');
+    }
+
+    // Dashboard 
+
+    public function dashboard()
+    {
+        return view('dashboard.auth.dashboard');
+    }
+
+    // Currently login admins
+    public function adminDashboard()
+    {
+        // Get all admin users
+        $admins = User::where('usertype', 'admin')->get();
+
+        // Verify current user is admin
+        if (Auth::user()->usertype !== 'admin') {
+            abort(403, 'Unauthorized access');
+        }
+
+        return view('dashboard.auth.admin', compact('admins'));
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        return redirect()->route('login.add');
     }
 }

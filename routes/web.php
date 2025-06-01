@@ -83,7 +83,7 @@ Route::prefix('reservation')->group(function () {
 
 // Website routes
 
-Route::get('/', [WebController::class, 'website']);
+Route::get('/', [WebController::class, 'website'])->name('website');
 Route::get('/web/menu', [WebController::class, 'menu'])->name('menu');
 Route::get('/web/chefs', [WebController::class, 'chefs'])->name('chefs');
 Route::get('/web/events', [WebController::class, 'events'])->name('events');
@@ -116,5 +116,10 @@ Route::delete('/register/delete/{id}', [AuthController::class, 'delete'])->name(
 // Login routes
 
 Route::get('/login', [AuthController::class, 'loginform'])->name('login.add');
-Route::post('/login', [AuthController::class, 'authenticate']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout.add');
+Route::post('/login', [AuthController::class, 'authentication']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Admin routes
+
+Route::get('/admin', [AuthController::class, 'adminDashboard'])->name('admin.dashboard');
+Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
