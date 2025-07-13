@@ -69,7 +69,7 @@
                                     <a href="#" class="btn btn-outline-danger rounded-circle p-2">
                                         <i class="bi bi-facebook"></i>
                                     </a>
-                                    <a href="#" class="btn btn-outline-danger rounded-circle p-2">
+                                    <a href="{{ route('google.login') }}" class="btn btn-outline-danger rounded-circle p-2">
                                         <i class="bi bi-google"></i>
                                     </a>
                                     <a href="#" class="btn btn-outline-danger rounded-circle p-2">

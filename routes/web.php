@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\AuthContrller;
-use App\Http\Controllers\AuthController;
 use App\Models\Chefs;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthContrller;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ChefsController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ReservationController;
 
 // Route::get('/',[WebController::class,'website']);
@@ -123,3 +124,8 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/admin', [AuthController::class, 'adminDashboard'])->name('admin.dashboard');
 Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+
+// Google route 
+
+Route::get('/google/redirect', [GoogleAuthController::class, 'index'])->name('google.login');
+Route::get('/google/callback', [GoogleAuthController::class, 'store']);

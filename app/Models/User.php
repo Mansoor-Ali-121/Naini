@@ -25,7 +25,11 @@ class User extends Authenticatable
         'contact',
         'address',
         'picture',
-        'usertype'
+        'usertype',
+        'google_id',
+        'google_token',
+        'google_refresh_token',
+        'google_avatar',
     ];
 
     /**
