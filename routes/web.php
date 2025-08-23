@@ -127,5 +127,5 @@ Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashbo
 
 // Google route 
 
-Route::get('/google/redirect', [GoogleAuthController::class, 'index'])->name('google.login');
-Route::get('/google/callback', [GoogleAuthController::class, 'store']);
+Route::get('/google/redirect', [GoogleAuthController::class, 'index'])->name('google.auth');
+Route::get('/google/callback', [GoogleAuthController::class, 'verify'])->name('google.auth');

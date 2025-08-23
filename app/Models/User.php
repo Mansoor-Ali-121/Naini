@@ -30,6 +30,7 @@ class User extends Authenticatable
         'google_token',
         'google_refresh_token',
         'google_avatar',
+        
     ];
 
     /**

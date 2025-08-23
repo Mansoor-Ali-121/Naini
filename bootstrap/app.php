@@ -11,7 +11,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Register your custom route middleware here
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ]);
+
+        // If you need to add global middleware, you would do it like this:
+        // $middleware->web(append: [
+        //     \App\Http\Middleware\SomeGlobalMiddleware::class,
+        // ]);
+
+        // If you need to modify existing middleware groups, e.g., 'web'
+        // $middleware->web(remove: \App\Http\Middleware\PreventRequestsDuringMaintenance::class);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

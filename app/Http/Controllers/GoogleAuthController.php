@@ -13,10 +13,9 @@ class GoogleAuthController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
-    public function store()
+    public function verify()
     {
         $googleUser = Socialite::driver('google')->user();
-
         $user = User::where('email', $googleUser->email)->first();
 
         if ($user) {
@@ -32,12 +31,12 @@ class GoogleAuthController extends Controller
             $user = User::create([
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
-                'password' => bcrypt('password'),
+                // 'password' => bcrypt('password'),
                 'google_id' => $googleUser->id,
                 'google_token' => $googleUser->token,
                 'google_refresh_token' => $googleUser->refreshToken,
                 'google_avatar' => $googleUser->avatar,
-                'password' => bcrypt($this->randomPassword())
+                'password' => $this->randomPassword()
             ]);
         }
         Auth::login($user);
@@ -46,7 +45,7 @@ class GoogleAuthController extends Controller
     function randomPassword()
     {
         $alphabet = '!@#$$%#()abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $pass = array(); //remember to declare $pass as an array
+        $pass = array(); 
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
         for ($i = 0; $i < 30; $i++) {
             $n = rand(0, $alphaLength);
