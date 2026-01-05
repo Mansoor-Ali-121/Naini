@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class SubCategories extends Model
 {
     protected $fillable = [
-        
+
         'name',
-        'ActualSlug',
-        'description'
+        'actualslug',
+        'cat_id'
 
     ];
 }

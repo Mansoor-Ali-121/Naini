@@ -10,6 +10,7 @@
   <title>Naini</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
+  <link rel="icon" href="{{ asset('website/assets/img/favicon.png') }}" type="image/png">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/" rel="preconnect">
@@ -32,13 +33,12 @@
 
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
-
-      <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('website/assets/img/logo.png') }}" alt=""> 
-        <h1 class="sitename">Naini</h1>
-        <span>.</span>
-      </a>
+     <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto me-xl-0">
+  <div class="logo-box">
+    <h1 class="sitename animate-logo">Nai<span>ni</span></h1>
+    <span class="tagline">RESTAURANT</span>
+  </div>
+</a>
 
       <nav id="navmenu" class="navmenu">
         <ul>

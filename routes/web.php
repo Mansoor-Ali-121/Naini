@@ -13,6 +13,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\SubCatController;
 
 // Route::get('/',[WebController::class,'website']);
 // Route::get('/',[WebController::class,'dashboard'])->name('dashboard');
@@ -35,6 +36,17 @@ Route::get('/category/show', [CategoryController::class, 'show'])->name('categor
 Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
 Route::patch('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+
+// Subcategory-Routes
+Route::prefix('subcategory')->group(function () {
+
+    Route::get('/add', [SubCatController::class, 'index'])->name('subcategory.add');
+    Route::post('/add', [SubCatController::class, 'store']);
+    Route::get('/show', [SubCatController::class, 'show'])->name('subcategory.show');
+    Route::get('/edit/{id}', [SubCatController::class, 'edit'])->name('subcategory.edit');
+    Route::patch('/update/{id}', [SubCatController::class, 'update'])->name('subcategory.update');
+    Route::delete('/delete/{id}', [SubCatController::class, 'destroy'])->name('subcategory.delete');
+});
 
 // Chefs-Routes
 

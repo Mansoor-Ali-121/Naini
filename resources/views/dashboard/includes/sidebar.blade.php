@@ -1,21 +1,19 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <!-- User Info Section -->
-     <div class="user-info text-center py-4">
-    <div class="profile-pic-container">
-        @auth
-            <img src="{{ Auth::user()->picture ? asset('Users/users_pictures/' . Auth::user()->picture) : asset('default-user.png') }}" 
-                 class="profile-pic rounded-circle shadow" 
-                 alt="Admin Profile"
-                 onerror="this.src='{{ asset('default-user.png') }}'">
-        @else
-            <img src="{{ asset('default-user.png') }}" 
-                 class="profile-pic rounded-circle shadow" 
-                 alt="Default Profile">
-        @endauth
-    </div>
-    <h2 class="user-role fancy-text">Admin</h2>
-</div>
+        <div class="user-info text-center py-4">
+            <div class="profile-pic-container">
+                @auth
+                    <img src="{{ Auth::user()->picture ? asset('Users/users_pictures/' . Auth::user()->picture) : asset('default-user.png') }}"
+                        class="profile-pic rounded-circle shadow" alt="Admin Profile"
+                        onerror="this.src='{{ asset('default-user.png') }}'">
+                @else
+                    <img src="{{ asset('default-user.png') }}" class="profile-pic rounded-circle shadow"
+                        alt="Default Profile">
+                @endauth
+            </div>
+            <h2 class="user-role fancy-text">Admin</h2>
+        </div>
 
         <!-- Add the following CSS for styling -->
         <style>
@@ -133,13 +131,13 @@
 
         <ul class="sidebar-nav">
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{route('dashboard')}}">
+                <a class="sidebar-link" href="{{ route('dashboard') }}">
                     <i class="align-middle" data-feather="activity"></i> <span class="align-middle">Dashboard</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{route('admin.dashboard')}}">
+                <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
                 </a>
             </li>
@@ -152,8 +150,8 @@
                     <i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="{{route('register.show')}}">View Users</a></li>
-                    <li><a class="dropdown-item" href="{{route('register.add')}}">Add User</a></li>
+                    <li><a class="dropdown-item" href="{{ route('register.show') }}">View Users</a></li>
+                    <li><a class="dropdown-item" href="{{ route('register.add') }}">Add User</a></li>
                 </ul>
             </li>
 
@@ -183,6 +181,19 @@
                 </ul>
             </li>
 
+            {{-- Sub-Categories --}}
+
+            <li class="sidebar-item dropdown">
+                <a class="sidebar-link dropdown" href="#" id="categoryDropdown" role="button"
+                    data-bs-toggle="dropdown">
+                    <i class="align-middle" data-feather="tag"></i> <span class="align-middle">Sub-Categories</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                    <li><a class="dropdown-item" href="{{ route('subcategory.show') }}">View Sub-Categories</a></li>
+                    <li><a class="dropdown-item" href="{{ route('subcategory.add') }}">Add Sub-Categories</a></li>
+                </ul>
+            </li>
+
             {{-- Chefs --}}
 
             <li class="sidebar-item dropdown">
@@ -204,7 +215,7 @@
                     <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Events</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="eventsDropdown">
-                    <li><a class="dropdown-item" href="{{route('events.show')}}">View Events</a></li>
+                    <li><a class="dropdown-item" href="{{ route('events.show') }}">View Events</a></li>
                     <li><a class="dropdown-item" href="{{ route('events.add') }}">Add Events</a></li>
                 </ul>
             </li>
@@ -217,8 +228,8 @@
                     <i class="align-middle" data-feather="image"></i> <span class="align-middle">Gallery</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
-                    <li><a class="dropdown-item" href="{{route('gallery.show')}}">View Gallery</a></li>
-                    <li><a class="dropdown-item" href="{{route('gallery.add')}}">Add Gallery</a></li>
+                    <li><a class="dropdown-item" href="{{ route('gallery.show') }}">View Gallery</a></li>
+                    <li><a class="dropdown-item" href="{{ route('gallery.add') }}">Add Gallery</a></li>
                 </ul>
             </li>
 
@@ -230,8 +241,8 @@
                     <i class="align-middle" data-feather="mail"></i> <span class="align-middle">Contacts</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="contactDropdown">
-                    <li><a class="dropdown-item" href="{{route('contacts.show')}}">View Contacts</a></li>
-                    <li><a class="dropdown-item" href="{{route('contacts.add')}}">Add Contact</a></li>
+                    <li><a class="dropdown-item" href="{{ route('contacts.show') }}">View Contacts</a></li>
+                    <li><a class="dropdown-item" href="{{ route('contacts.add') }}">Add Contact</a></li>
                 </ul>
             </li>
 
@@ -243,8 +254,8 @@
                     <i class="align-middle" data-feather="clock"></i> <span class="align-middle">Reservation</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="reservationDropdown">
-                    <li><a class="dropdown-item" href="{{route('reservation.show')}}">View Reservation</a></li>
-                    <li><a class="dropdown-item" href="{{route('reservation.add')}}">Add Reservation</a></li>
+                    <li><a class="dropdown-item" href="{{ route('reservation.show') }}">View Reservation</a></li>
+                    <li><a class="dropdown-item" href="{{ route('reservation.add') }}">Add Reservation</a></li>
                 </ul>
             </li>
 
@@ -262,7 +273,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link text-danger" href="{{route('logout')}}">
+                <a class="sidebar-link text-danger" href="{{ route('logout') }}">
                     <i class="align-middle" data-feather="power"></i> <span class="align-middle">Logout</span>
                 </a>
             </li>

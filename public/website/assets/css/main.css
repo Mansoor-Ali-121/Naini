@@ -229,26 +229,59 @@ h6 {
   z-index: 997;
 }
 
-.header .logo {
+/* Logo Container */
+.logo-box {
+  display: flex;
+  flex-direction: column;
   line-height: 1;
 }
 
-.header .logo img {
-  max-height: 36px;
-  margin-right: 8px;
-}
-
-.header .logo h1 {
-  font-size: 30px;
+/* Naini Text Animation */
+.animate-logo {
+  font-family: 'Roboto', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   margin: 0;
-  font-weight: 700;
-  color: var(--heading-color);
-  font-family: var(--default-font);
+  background: linear-gradient(to right, #37373f 50%, #ce1212 50%);
+  background-size: 200% 100%;
+  background-position: left bottom;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.4s ease-in-out;
+  display: inline-block;
 }
 
-.header .logo span {
-  color: var(--accent-color);
-  font-size: 36px;
+.animate-logo span {
+  -webkit-text-fill-color: #ce1212; /* Default Red */
+}
+
+/* Restaurant Tagline Styling */
+.tagline {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #7f7f90;
+  text-transform: uppercase;
+  margin-top: 3px;
+  transition: 0.3s;
+}
+
+/* --- HOVER EFFECTS --- */
+
+/* Jab poore logo par mouse jaye */
+.logo:hover .animate-logo {
+  background-position: right bottom; /* Gradient move hoga */
+}
+
+/* Hover par span ka color handle karna */
+.logo:hover .animate-logo span {
+  -webkit-text-fill-color: #37373f; /* Red wala part dark ho jayega */
+}
+
+.logo:hover .tagline {
+  color: #ce1212; /* Tagline red ho jayegi */
 }
 
 .header .btn-getstarted,

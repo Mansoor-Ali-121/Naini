@@ -20,21 +20,41 @@
         <div class="card-header d-flex justify-content-between align-items-center py-3"
             style="background: linear-gradient(45deg, #2c3e50, #3498db); border-radius: 15px 15px 0 0;">
             <h4 class="mb-0 text-white" style="font-size: 1.8rem;">
-                🍽️ Create New Category
+                🍽️ Create New Subcategory
             </h4>
         </div>
 
         <div class="card-body p-4">
-            <form action="{{ route('category.add') }}" method="POST">
+            <form action="{{ route('subcategory.add') }}" method="POST">
                 @csrf
 
                 <div class="row g-3">
+                    <!-- Select Main Category -->
+                    <div class="col-md-12 mb-3">
+                        <div class="form-floating">
+                            <select class="form-select rounded-pill" id="category_id" name="category_id" required>
+                                <option value="" selected disabled>Select Main Category</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <label for="category_id" class="ms-3">
+                                <i class="bi bi-diagram-3 me-2"></i> Main Category
+                            </label>
+                            @error('category_id')
+                                <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="form-floating">
                             <input type="text" class="form-control rounded-pill" id="name" name="name"
-                                placeholder="Category Name" required>
+                                value="{{ old('name') }}" placeholder="Subcategory Name" required>
                             <label for="name" class="ms-3">
-                                <i class="bi bi-tag me-2"></i> Category Name
+                                <i class="bi bi-tag me-2"></i> Subcategory Name
                             </label>
                             @error('name')
                                 <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
@@ -45,7 +65,7 @@
                     <div class="col-md-6">
                         <div class="form-floating">
                             <input type="text" class="form-control rounded-pill" id="slug" name="slug"
-                                placeholder="Type Slug Here" required>
+                                value="{{ old('slug') }}" placeholder="Type Slug Here">
                             <label for="slug" class="ms-3">
                                 <i class="bi bi-pencil me-2"></i> Type Slug Here
                             </label>
@@ -55,8 +75,8 @@
                     <div class="col-md-12">
                         <div class="form-floating">
                             <input type="text" class="form-control rounded-pill bg-light fw-bold text-primary"
-                                id="ActualSlug" name="ActualSlug" placeholder="Final Slug" readonly
-                                style="border: 1px dashed #3498db;">
+                                id="ActualSlug" name="ActualSlug" value="{{ old('ActualSlug') }}" 
+                                placeholder="Final Slug" readonly style="border: 1px dashed #3498db;">
                             <label for="ActualSlug" class="ms-3">
                                 <i class="bi bi-link-45deg me-2"></i> Generated Final Slug (No Numbers)
                             </label>
@@ -68,12 +88,28 @@
 
                     <div class="col-md-12">
                         <div class="form-floating">
-                            <textarea class="form-control" id="description" name="description" placeholder="Description" required
-                                style="border-radius: 20px; height: 100px;"></textarea>
+                            <textarea class="form-control" id="description" name="description" 
+                                placeholder="Description" style="border-radius: 20px; height: 100px;">{{ old('description') }}</textarea>
                             <label for="description" class="ms-3">
-                                <i class="bi bi-card-text me-2"></i> Description
+                                <i class="bi bi-card-text me-2"></i> Description (Optional)
                             </label>
                             @error('description')
+                                <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Status Selection -->
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <select class="form-select rounded-pill" id="status" name="status" required>
+                                <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                            <label for="status" class="ms-3">
+                                <i class="bi bi-toggle-on me-2"></i> Status
+                            </label>
+                            @error('status')
                                 <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
                             @enderror
                         </div>
@@ -82,7 +118,7 @@
                     <div class="col-12 text-center mt-3">
                         <button type="submit" class="btn btn-lg rounded-pill px-5 border-0"
                             style="background: linear-gradient(45deg, #2c3e50, #3498db); color: white; transition: all 0.3s ease;">
-                            <i class="bi bi-journal-plus me-2"></i> Create Category
+                            <i class="bi bi-plus-circle me-2"></i> Create Subcategory
                         </button>
                     </div>
                 </div>
@@ -105,7 +141,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: #3498db;
             box-shadow: none;
         }
@@ -115,6 +151,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const typeInput = document.getElementById('slug');
             const finalSlug = document.getElementById('ActualSlug');
+            const nameInput = document.getElementById('name');
 
             // Generic function jo sirf letters aur dash allow karega
             function generateSlug(text) {
@@ -133,6 +170,15 @@
 
                 // ActualSlug wali field update ho jaye
                 finalSlug.value = generateSlug(this.value);
+            });
+
+            // Optional: Auto-generate slug from name when name field loses focus
+            nameInput.addEventListener('blur', function() {
+                if (typeInput.value === '' && this.value !== '') {
+                    const autoSlug = generateSlug(this.value);
+                    typeInput.value = autoSlug;
+                    finalSlug.value = autoSlug;
+                }
             });
         });
     </script>

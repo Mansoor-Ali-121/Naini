@@ -32,6 +32,7 @@ class CategoryController extends Controller
         $vadlidateData = $request->validate([
 
             'name' =>'required|min:3|max:255',
+            'ActualSlug' =>'required|min:3|max:255|unique:categories,ActualSlug',
             'description' =>'required|min:3|max:255',
         ]);
         // Store the data in the database
@@ -68,6 +69,7 @@ class CategoryController extends Controller
         $vadlidateData = $request->validate([
 
             'name' =>'required|min:3|max:255',
+            'ActualSlug' => 'required|min:3|max:255|unique:categories,ActualSlug,'.$id,
             'description' =>'required|min:3|max:255',
         ]);
         // Update the data in the database
