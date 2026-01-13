@@ -14,7 +14,18 @@ class Menu extends Model
     'price',
     'menu_picture',
     'category_id',
+    'subcategory_id',
+    'actual_slug',
     
-   
  ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(SubCategories::class, 'subcategory_id');
+    }
 }

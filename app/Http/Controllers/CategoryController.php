@@ -38,7 +38,7 @@ class CategoryController extends Controller
         // Store the data in the database
         Category::create($vadlidateData);
         // Redirect to the dashboard
-        return redirect()->route('category.add')->with('success', 'Category added successfully');
+        return redirect()->route('category.show')->with('success', 'Category added successfully');
 
     }
 

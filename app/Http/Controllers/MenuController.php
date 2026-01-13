@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Menu;
+use App\Models\SubCategories;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -12,7 +14,9 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view('dashboard.menu.add');
+        $categories = Category::all();
+        $subcategories = SubCategories::all();
+        return view('dashboard.menu.add', compact('categories', 'subcategories'));
     }
 
     /**
@@ -34,13 +38,21 @@ class MenuController extends Controller
             'description' => 'required|string|max:1000',
             'price' => 'required|string|regex:/^\$?\d+(\.\d{1,2})?$/', // Validate price format
             'menu_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate image
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:sub_categories,id',
+            'actual_slug' => 'required|string|max:255|unique:menus,actual_slug',
         ]);
+        // Dollar sign aur kisi bhi kism ka comma khatam karne ke liye
+        $price = str_replace(['$', ','], '', $validatedData['price']);
 
         // Prepare data for saving
         $data = [
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
-            'price' => '$' . ltrim($validatedData['price'], '$'), // Ensure price has a single $
+            'price'          => (float) $price, // Isay saaf number bana dein
+            'actual_slug'    => $validatedData['actual_slug'],    // Yeh line add karein
+            'category_id'    => $validatedData['category_id'],    // Yeh line add karein
+            'subcategory_id' => $validatedData['subcategory_id'], // Yeh line add karein
         ];
 
         // Handle the menu_picture file upload
@@ -75,7 +87,9 @@ class MenuController extends Controller
     public function edit(string $id)
     {
         $menu = Menu::find($id);
-        return view('dashboard.menu.edit', compact('menu'));
+        $categories = Category::all();
+        $subcategories = SubCategories::all();
+        return view('dashboard.menu.edit', compact('menu', 'categories', 'subcategories'));
     }
 
     /**
@@ -89,16 +103,25 @@ class MenuController extends Controller
             'description' => 'required|string|max:1000',
             'price' => 'required|string|regex:/^\$?\d+(\.\d{1,2})?$/', // Validate price format
             'menu_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate image
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:sub_categories,id',
+            'actual_slug' => 'required|string|max:255|unique:menus,actual_slug,' . $id,
         ]);
 
         // Find the menu item
         $menu = Menu::findOrFail($id);
 
+        // Dollar sign aur kisi bhi kism ka comma khatam karne ke liye
+        $price = str_replace(['$', ','], '', $validatedData['price']);
+
         // Prepare data for updating
         $data = [
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
-            'price' => '$' . ltrim($validatedData['price'], '$'), // Ensure price has a single $
+            'price'          => (float) $price, // Isay saaf number bana dein
+            'actual_slug'    => $validatedData['actual_slug'],    // Yeh line add karein
+            'category_id'    => $validatedData['category_id'],    // Yeh line add karein
+            'subcategory_id' => $validatedData['subcategory_id'], // Yeh line add karein
         ];
 
         // Handle image upload

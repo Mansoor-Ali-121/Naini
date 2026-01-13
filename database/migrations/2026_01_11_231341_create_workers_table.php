@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_categories', function (Blueprint $table) {
+        Schema::create('workers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('Actual_Slug')->unique(); // Slug hamesha unique hona chahiye
-            $table->foreignId('cat_id')->constrained('categories')->onDelete('cascade');
-            $table->string('status')->default('active'); 
+            $table->string('picture');
+            $table->string('actual_slug')->unique();
+            $table->string('field')->nullable();
+            $table->string('address');
+            $table->string('phone');
+            $table->string('role');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_categories');
+        Schema::dropIfExists('workers');
     }
 };

@@ -11,15 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // 'table' ki jagah 'create' use karein
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->string('price');
-            $table->string('menu_picture');
+            $table->string('name'); // Jo jo columns menus mein pehle thay wo yahan likhein
+            $table->text('description')->nullable();
+            $table->decimal('price', 8, 2);
+            $table->string('menu_picture')->nullable();
 
-     
+            // Ab aapke naye columns
+            $table->string('actual_slug')->unique();
 
+            // Foreign Keys
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('subcategory_id')->constrained('sub_categories')->onDelete('cascade');
 
             $table->timestamps();
         });

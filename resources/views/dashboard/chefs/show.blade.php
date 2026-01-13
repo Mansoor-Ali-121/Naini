@@ -1,139 +1,147 @@
 @extends('template')
+
 @section('main_section')
+    @include('dashboard.includes.alerts')
 
-@include('dashboard.includes.alerts')
+    <div class="card shadow-lg border-0" style="border-radius: 15px;">
+        <div class="card-header d-flex justify-content-between align-items-center py-3"
+            style="background: linear-gradient(45deg, #2c3e50, #3498db); border-radius: 15px 15px 0 0; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h4 class="mb-0 text-white" style="font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                👨‍🍳 Master Chefs
+            </h4>
+            <div class="d-flex gap-2">
+                <a href="{{ url()->previous() }}" class="btn btn-outline-light btn-sm rounded-pill px-3" style="border-width: 2px;">
+                    <i class="bi bi-arrow-left me-1"></i> Back
+                </a>
+                <a href="{{ route('chef.add') }}" class="btn btn-light btn-sm rounded-pill px-3" style="border-width: 2px; color: #2c3e50;">
+                    <i class="bi bi-person-plus-fill me-1"></i> Add New Chef
+                </a>
+            </div>
+        </div>
 
-<div class="card shadow-lg" style="font-family: 'Dancing Script', cursive; border-radius: 15px;">
-    <!-- Header -->
-    <div class="card-header d-flex justify-content-between align-items-center py-3" 
-         style="
-            background: linear-gradient(45deg, #2c3e50, #3498db);
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-         ">
-        <h4 class="mb-0 text-white" style="font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-            👨🍳 Master Chefs
-        </h4>
-        <div class="d-flex gap-2">
-            <a href="{{ url()->previous() }}" 
-               class="btn btn-outline-light btn-sm rounded-pill px-3"
-               style="border-width: 2px;">
-                <i class="bi bi-arrow-left me-1"></i> Back
-            </a>
-            <a href="{{ route('chef.add') }}" 
-               class="btn btn-light btn-sm rounded-pill px-3"
-               style="border-width: 2px;">
-                <i class="bi bi-plus-lg me-1"></i> Add New
-            </a>
+        <div class="card-body p-4">
+            @if ($chefs->isEmpty())
+                <div class="alert alert-warning alert-dismissible fade show rounded-pill" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i> No chefs found in the kitchen!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="bg-light-header">
+                            <tr>
+                                <th class="py-3 ps-4" style="width: 80px;">#ID</th>
+                                <th class="py-3 text-center">Photo</th>
+                                <th class="py-3">Chef Name</th>
+                                <th class="py-3 text-center">Experience</th>
+                                <th class="py-3">Specialty</th>
+                                <th class="py-3 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($chefs as $chef)
+                                <tr>
+                                    <td class="ps-4">
+                                        <span class="text-muted fw-bold">#{{ $chef->id }}</span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="avatar-container">
+                                            <img src="{{ asset('Chefs/chefs_pictures/' . $chef->chef_picture) }}"
+                                                 class="rounded-circle shadow-sm border border-2 border-white"
+                                                 style="width: 60px; height: 60px; object-fit: cover;"
+                                                 onerror="this.src='{{ asset('default-chef.png') }}'">
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="fw-bold text-dark" style="font-size: 1.1rem;">{{ $chef->name }}</span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="badge bg-soft-info text-info rounded-pill px-3 py-2 border border-info">
+                                            <i class="bi bi-star-fill me-1"></i> {{ $chef->experience }} Years
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-soft-danger text-danger rounded-pill px-3 py-2">
+                                            <i class="bi bi-egg-fried me-1"></i> {{ $chef->specialty }}
+                                        </span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ route('chef.edit', $chef->id) }}" 
+                                               class="btn btn-sm btn-action rounded-pill px-3" 
+                                               data-bs-toggle="tooltip" title="Edit Chef">
+                                                <i class="bi bi-pencil-square text-primary"></i>
+                                            </a>
+                                            <form action="{{ route('chef.delete', $chef->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-action rounded-pill px-3" 
+                                                        onclick="return confirm('Are you sure you want to remove this chef?')"
+                                                        data-bs-toggle="tooltip" title="Delete Chef">
+                                                    <i class="bi bi-trash3 text-danger"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
 
-    <div class="card-body p-4">
-        @if ($chefs->isEmpty())
-        <div class="alert alert-warning alert-dismissible fade show rounded-pill" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            No chefs found.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @else
-        <div class="table-responsive">
-            <table class="table table-hover table-striped align-middle">
-                <thead class="bg-light-primary">
-                    <tr>
-                        <th class="py-3" style="border-bottom: 2px solid #3498db;">#ID</th>
-                        <th class="py-3" style="border-bottom: 2px solid #3498db;">Chef Name</th>
-                        <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Experience</th>
-                        <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Specialty</th>
-                        <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Photo</th>
-                        <th class="py-3 text-center" style="border-bottom: 2px solid #3498db;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($chefs as $chef)
-                    <tr class="shadow-sm" style="border-bottom: 1px solid #dee2e6; transition: all 0.3s ease;">
-                        <td class="fw-bold">#{{ $chef->id }}</td>
-                        <td>
-                            <span class="badge bg-success rounded-pill px-3 py-2">
-                                {{ $chef->name }}
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <span class="badge bg-info rounded-pill px-3 py-2">
-                                {{ $chef->experience }} years
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <span class="badge bg-danger rounded-pill px-3 py-2">
-                                {{ $chef->specialty }}
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <img src="{{ asset('Chefs/chefs_pictures/' . $chef->chef_picture) }}"
-                                 class="img-thumbnail shadow-sm" 
-                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #fff;">
-                        </td>
-                        <td class="text-center">
-                            <div class="d-flex gap-2 justify-content-center">
-                                <a href="{{ route('chef.edit', $chef->id) }}" 
-                                   class="btn btn-sm btn-primary rounded-pill px-3"
-                                   data-bs-toggle="tooltip" 
-                                   title="Edit Chef">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form action="{{ route('chef.delete', $chef->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                            class="btn btn-sm btn-danger rounded-pill px-3"
-                                            data-bs-toggle="tooltip" 
-                                            title="Delete Chef"
-                                            onclick="return confirm('Are you sure? This action cannot be undone.');">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @endif
-    </div>
-</div>
+    <style>
+        .bg-light-header {
+            background-color: #f8faff !important;
+            border-bottom: 2px solid #edf2f9;
+        }
 
-<style>
-    .bg-light-primary {
-        background: linear-gradient(45deg, #f8f9fa, #e9ecef) !important;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(52, 152, 219, 0.1) !important;
-        transform: translateX(4px);
-    }
-    .badge {
-        font-size: 1rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        font-family: Arial, sans-serif;
-    }
-    .img-thumbnail {
-        transition: transform 0.3s ease;
-    }
-    .img-thumbnail:hover {
-        transform: scale(1.1);
-    }
-    .card {
-        max-width: 1200px;
-        margin: 2rem auto;
-    }
-</style>
+        .bg-soft-info { background-color: rgba(13, 202, 240, 0.1); }
+        .bg-soft-danger { background-color: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.2); }
 
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-        [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        .forEach(function(tooltipTriggerEl){
-            new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-    })
-</script>
+        .table-hover tbody tr {
+            transition: all 0.3s ease;
+        }
 
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.04) !important;
+            transform: scale(1.005);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .btn-action {
+            background: #fff;
+            border: 1px solid #eee;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            border-color: #3498db;
+            background: #f0f7ff;
+        }
+
+        .avatar-container img {
+            transition: transform 0.3s ease;
+        }
+
+        tr:hover .avatar-container img {
+            transform: scale(1.15) rotate(5deg);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
 @endsection

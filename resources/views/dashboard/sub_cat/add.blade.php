@@ -32,23 +32,25 @@
                     <!-- Select Main Category -->
                     <div class="col-md-12 mb-3">
                         <div class="form-floating">
-                            <select class="form-select rounded-pill" id="category_id" name="category_id" required>
+                            <select class="form-select rounded-pill" id="cat_id" name="cat_id" required>
                                 <option value="" selected disabled>Select Main Category</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ old('cat_id') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            <label for="category_id" class="ms-3">
+                            <label for="cat_id" class="ms-3">
                                 <i class="bi bi-diagram-3 me-2"></i> Main Category
                             </label>
-                            @error('category_id')
+                            @error('cat_id')
                                 <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
+                    <!-- Subcategory Name -->
                     <div class="col-md-6">
                         <div class="form-floating">
                             <input type="text" class="form-control rounded-pill" id="name" name="name"
@@ -62,6 +64,7 @@
                         </div>
                     </div>
 
+                    {{-- SLug --}}
                     <div class="col-md-6">
                         <div class="form-floating">
                             <input type="text" class="form-control rounded-pill" id="slug" name="slug"
@@ -72,28 +75,16 @@
                         </div>
                     </div>
 
+                    {{-- Preview Slug  --}}
                     <div class="col-md-12">
                         <div class="form-floating">
                             <input type="text" class="form-control rounded-pill bg-light fw-bold text-primary"
-                                id="ActualSlug" name="ActualSlug" value="{{ old('ActualSlug') }}" 
+                                id="Actual_Slug" name="Actual_Slug" value="{{ old('Actual_Slug') }}"
                                 placeholder="Final Slug" readonly style="border: 1px dashed #3498db;">
-                            <label for="ActualSlug" class="ms-3">
+                            <label for="Actual_Slug" class="ms-3">
                                 <i class="bi bi-link-45deg me-2"></i> Generated Final Slug (No Numbers)
                             </label>
-                            @error('ActualSlug')
-                                <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <textarea class="form-control" id="description" name="description" 
-                                placeholder="Description" style="border-radius: 20px; height: 100px;">{{ old('description') }}</textarea>
-                            <label for="description" class="ms-3">
-                                <i class="bi bi-card-text me-2"></i> Description (Optional)
-                            </label>
-                            @error('description')
+                            @error('Actual_Slug')
                                 <div class="invalid-feedback d-block ms-3">{{ $message }}</div>
                             @enderror
                         </div>
@@ -104,7 +95,8 @@
                         <div class="form-floating">
                             <select class="form-select rounded-pill" id="status" name="status" required>
                                 <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive
+                                </option>
                             </select>
                             <label for="status" class="ms-3">
                                 <i class="bi bi-toggle-on me-2"></i> Status
@@ -141,17 +133,19 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #3498db;
             box-shadow: none;
         }
     </style>
 
+    {{-- Slug  --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const typeInput = document.getElementById('slug');
-            const finalSlug = document.getElementById('ActualSlug');
-            const nameInput = document.getElementById('name');
+            const finalSlug = document.getElementById('Actual_Slug');
+            // const nameInput = document.getElementById('name');
 
             // Generic function jo sirf letters aur dash allow karega
             function generateSlug(text) {

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\SubCategories;
 use Illuminate\Http\Request;
 
-class SubCatCOntroller extends Controller
+class SubcatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,15 +31,24 @@ class SubCatCOntroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'Actual_Slug' => 'required|string|max:255|unique:sub_categories,actual_slug',
+            'cat_id' => 'required|exists:categories,id',
+            'status' => 'required|string|in:active,inactive',
+        ]);
+        SubCategories::create($validatedData);
+        return redirect()->route('subcategory.show')->with('success','Subcategory added successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        
+        $subcats = SubCategories::with('category')->get();
+        return view('dashboard.sub_cat.show', compact('subcats'));
     }
 
     /**
@@ -46,7 +56,9 @@ class SubCatCOntroller extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $subcat = SubCategories::findOrFail($id);
+        $categories = Category::all();
+        return view('dashboard.sub_cat.edit', compact('subcat', 'categories'));
     }
 
     /**
@@ -54,7 +66,17 @@ class SubCatCOntroller extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'Actual_Slug' => 'required|string|max:255|unique:sub_categories,actual_slug,'.$id,
+            'cat_id' => 'required|exists:categories,id',
+            'status' => 'required|string|in:active,inactive',
+        ]);
+
+        $subcat = SubCategories::findOrFail($id);
+        $subcat->update($validatedData);
+
+        return redirect()->route('subcategory.show')->with('success','Subcategory updated successfully.');
     }
 
     /**
@@ -62,6 +84,7 @@ class SubCatCOntroller extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        SubCategories::destroy($id);
+        return redirect()->route('subcategory.show')->with('success','Subcategory deleted successfully.');
     }
 }

@@ -13,7 +13,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\SubCatController;
+use App\Http\Controllers\SubcatController;
+use App\Http\Controllers\WorkersController;
 
 // Route::get('/',[WebController::class,'website']);
 // Route::get('/',[WebController::class,'dashboard'])->name('dashboard');
@@ -40,12 +41,23 @@ Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->
 // Subcategory-Routes
 Route::prefix('subcategory')->group(function () {
 
-    Route::get('/add', [SubCatController::class, 'index'])->name('subcategory.add');
-    Route::post('/add', [SubCatController::class, 'store']);
-    Route::get('/show', [SubCatController::class, 'show'])->name('subcategory.show');
-    Route::get('/edit/{id}', [SubCatController::class, 'edit'])->name('subcategory.edit');
-    Route::patch('/update/{id}', [SubCatController::class, 'update'])->name('subcategory.update');
-    Route::delete('/delete/{id}', [SubCatController::class, 'destroy'])->name('subcategory.delete');
+    Route::get('/add', [SubcatController::class, 'index'])->name('subcategory.add');
+    Route::post('/add', [SubcatController::class, 'store']);
+    Route::get('/show', [SubcatController::class, 'show'])->name('subcategory.show');
+    Route::get('/edit/{id}', [SubcatController::class, 'edit'])->name('subcategory.edit');
+    Route::patch('/update/{id}', [SubcatController::class, 'update'])->name('subcategory.update');
+    Route::delete('/delete/{id}', [SubcatController::class, 'destroy'])->name('subcategory.delete');
+});
+
+// Workers-Routes
+Route::prefix('workers')->group(function () {
+
+    Route::get('/add', [WorkersController::class, 'index'])->name('workers.add');
+    Route::post('/add', [WorkersController::class, 'store']);
+    Route::get('/show', [WorkersController::class, 'show'])->name('workers.show');
+    Route::get('/edit/{id}', [WorkersController::class, 'edit'])->name('workers.edit');
+    Route::patch('/update/{id}', [WorkersController::class, 'update'])->name('workers.update');
+    Route::delete('/delete/{id}', [WorkersController::class, 'destroy'])->name('workers.delete');
 });
 
 // Chefs-Routes

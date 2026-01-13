@@ -181,21 +181,29 @@
                 </ul>
             </li>
 
-            {{-- Sub-Categories --}}
-
+            {{-- Subcategories --}}
             <li class="sidebar-item dropdown">
-                <a class="sidebar-link dropdown" href="#" id="categoryDropdown" role="button"
-                    data-bs-toggle="dropdown">
-                    <i class="align-middle" data-feather="tag"></i> <span class="align-middle">Sub-Categories</span>
+                <a class="sidebar-link" href="#" id="subCatDropdown" data-bs-toggle="dropdown">
+                    <i class="align-middle" data-feather="layers"></i> <span class="align-middle">Sub-Categories</span>
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                <ul class="dropdown-menu" aria-labelledby="subCatDropdown">
                     <li><a class="dropdown-item" href="{{ route('subcategory.show') }}">View Sub-Categories</a></li>
                     <li><a class="dropdown-item" href="{{ route('subcategory.add') }}">Add Sub-Categories</a></li>
                 </ul>
             </li>
 
-            {{-- Chefs --}}
+            {{-- Workers --}}
+            <li class="sidebar-item dropdown">
+                <a class="sidebar-link" href="#" id="workerDropdown" data-bs-toggle="dropdown">
+                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">Workers</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="workerDropdown">
+                    <li><a class="dropdown-item" href="{{ route('workers.show') }}">View Workers</a></li>
+                    <li><a class="dropdown-item" href="{{ route('workers.add') }}">Add Workers</a></li>
+                </ul>
+            </li>
 
+            {{-- Chefs --}}
             <li class="sidebar-item dropdown">
                 <a class="sidebar-link dropdown" href="#" id="chefDropdown" role="button"
                     data-bs-toggle="dropdown">
@@ -208,7 +216,6 @@
             </li>
 
             {{-- Events --}}
-
             <li class="sidebar-item dropdown">
                 <a class="sidebar-link dropdown" href="#" id="eventsDropdown" role="button"
                     data-bs-toggle="dropdown">
@@ -221,7 +228,6 @@
             </li>
 
             {{-- Gallery --}}
-
             <li class="sidebar-item dropdown">
                 <a class="sidebar-link dropdown" href="#" id="galleryDropdown" role="button"
                     data-bs-toggle="dropdown">
@@ -234,7 +240,6 @@
             </li>
 
             {{-- Contacts --}}
-
             <li class="sidebar-item dropdown">
                 <a class="sidebar-link dropdown" href="#" id="contactDropdown" role="button"
                     data-bs-toggle="dropdown">
@@ -247,7 +252,6 @@
             </li>
 
             {{-- Reservations --}}
-
             <li class="sidebar-item dropdown">
                 <a class="sidebar-link dropdown" href="#" id="reservationDropdown" role="button"
                     data-bs-toggle="dropdown">
@@ -260,7 +264,6 @@
             </li>
 
             {{-- Reviews --}}
-
             <li class="sidebar-item dropdown">
                 <a class="sidebar-link dropdown" href="#" id="reviewsDropdown" role="button"
                     data-bs-toggle="dropdown">
