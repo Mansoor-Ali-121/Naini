@@ -14,6 +14,13 @@ class Chefs extends Model
     'specialty',
     'address',
     'phone',
-   
+    'slug',
+    'role',
+    'cat_id',
 ];
+
+public function category()
+{
+    return $this->belongsTo(Category::class, 'cat_id'); 
+}
 }

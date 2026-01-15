@@ -30,11 +30,11 @@
                     <table class="table table-hover align-middle">
                         <thead class="bg-light-header">
                             <tr>
-                                <th class="py-3 ps-4" style="width: 80px;">#ID</th>
-                                <th class="py-3 text-center">Photo</th>
-                                <th class="py-3">Chef Name</th>
+                                <th class="py-3 ps-4">Chef Details</th>
+                                <th class="py-3">Role & Category</th>
                                 <th class="py-3 text-center">Experience</th>
                                 <th class="py-3">Specialty</th>
+                                <th class="py-3">Contact info</th>
                                 <th class="py-3 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -42,20 +42,23 @@
                             @foreach ($chefs as $chef)
                                 <tr>
                                     <td class="ps-4">
-                                        <span class="text-muted fw-bold">#{{ $chef->id }}</span>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <div class="avatar-container">
-                                            <img src="{{ asset('Chefs/chefs_pictures/' . $chef->chef_picture) }}"
-                                                 class="rounded-circle shadow-sm border border-2 border-white"
-                                                 style="width: 60px; height: 60px; object-fit: cover;"
-                                                 onerror="this.src='{{ asset('default-chef.png') }}'">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="avatar-container">
+                                                <img src="{{ asset('Chefs/chefs_pictures/' . $chef->chef_picture) }}"
+                                                     class="rounded-circle shadow-sm border border-2 border-white"
+                                                     style="width: 55px; height: 55px; object-fit: cover;"
+                                                     onerror="this.src='{{ asset('default-chef.png') }}'">
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark mb-0" style="font-size: 1.1rem;">{{ $chef->name }}</div>
+                                                <small class="text-muted">ID: #{{ $chef->id }}</small>
+                                            </div>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <span class="fw-bold text-dark" style="font-size: 1.1rem;">{{ $chef->name }}</span>
+                                        <div class="mb-1"><span class="badge bg-soft-primary text-primary rounded-pill">{{ str_replace('-', ' ', ucwords($chef->role_slug)) }}</span></div>
+                                        <div class="small text-muted"><i class="bi bi-tag me-1"></i>{{ $chef->category->name ?? 'No Category' }}</div>
                                     </td>
 
                                     <td class="text-center">
@@ -68,6 +71,13 @@
                                         <span class="badge bg-soft-danger text-danger rounded-pill px-3 py-2">
                                             <i class="bi bi-egg-fried me-1"></i> {{ $chef->specialty }}
                                         </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="small fw-bold text-dark"><i class="bi bi-telephone me-1"></i> {{ $chef->phone }}</div>
+                                        <div class="small text-muted text-truncate" style="max-width: 150px;" title="{{ $chef->address }}">
+                                            <i class="bi bi-geo-alt me-1"></i> {{ $chef->address }}
+                                        </div>
                                     </td>
 
                                     <td class="text-center">
@@ -98,17 +108,10 @@
     </div>
 
     <style>
-        .bg-light-header {
-            background-color: #f8faff !important;
-            border-bottom: 2px solid #edf2f9;
-        }
-
+        .bg-light-header { background-color: #f8faff !important; border-bottom: 2px solid #edf2f9; }
         .bg-soft-info { background-color: rgba(13, 202, 240, 0.1); }
         .bg-soft-danger { background-color: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.2); }
-
-        .table-hover tbody tr {
-            transition: all 0.3s ease;
-        }
+        .bg-soft-primary { background-color: rgba(52, 152, 219, 0.1); border: 1px solid rgba(52, 152, 219, 0.2); }
 
         .table-hover tbody tr:hover {
             background-color: rgba(52, 152, 219, 0.04) !important;
@@ -116,32 +119,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .btn-action {
-            background: #fff;
-            border: 1px solid #eee;
-            transition: all 0.2s;
-        }
+        .btn-action { background: #fff; border: 1px solid #eee; transition: all 0.2s; }
+        .btn-action:hover { border-color: #3498db; background: #f0f7ff; }
 
-        .btn-action:hover {
-            border-color: #3498db;
-            background: #f0f7ff;
-        }
-
-        .avatar-container img {
-            transition: transform 0.3s ease;
-        }
-
-        tr:hover .avatar-container img {
-            transform: scale(1.15) rotate(5deg);
-        }
+        tr:hover .avatar-container img { transform: scale(1.1) rotate(3deg); }
+        .avatar-container img { transition: all 0.3s ease; }
     </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        });
-    </script>
 @endsection

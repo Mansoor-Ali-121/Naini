@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('chefs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('cat_id')->constrained('categories')->onDelete('cascade');
             $table->string('name');
             $table->string('specialty');
             $table->string('experience');
             $table->string('phone');
             $table->string('address');
             $table->string('chef_picture');
+            $table->string('slug')->unique();
+            $table->string('role')->unique();
 
             $table->timestamps();
         });

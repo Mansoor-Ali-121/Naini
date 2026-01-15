@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Chefs;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class ChefsController extends Controller
      */
     public function index()
     {
-        return view('dashboard.chefs.add');
+        $categories = Category::all();
+        return view('dashboard.chefs.add', compact('categories'));
     }
 
     /**
@@ -34,6 +36,9 @@ class ChefsController extends Controller
             'specialty' => 'required|string|max:255',
             'address' => 'required|string|max:500',
             'phone' => 'required|string|max:20',
+            'slug' => 'required|string|max:255|unique:chefs,slug',
+            'role' => 'required|string|max:100',
+            'cat_id' => 'required|exists:categories,id',
         ]);
 
         // Handle file upload (if a file is uploaded)
@@ -58,8 +63,8 @@ class ChefsController extends Controller
     {
         // Fetch the chef record from the database based on the provided ID
         $chefs = Chefs::all();
-
-        return view('dashboard.chefs.show', compact('chefs'));
+        $categories = Category::all();
+        return view('dashboard.chefs.show', compact('chefs', 'categories'));
     }
 
     /**
@@ -74,44 +79,44 @@ class ChefsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-   public function update(Request $request, string $id)
-{
-    // Validate request data
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'experience' => 'required|integer|min:0',
-        'chef_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'specialty' => 'required|string|max:255',
-        'address' => 'required|string|max:500',
-        'phone' => 'required|string|max:20',
-    ]);
+    public function update(Request $request, string $id)
+    {
+        // Validate request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'experience' => 'required|integer|min:0',
+            'chef_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'specialty' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
+            'phone' => 'required|string|max:20',
+        ]);
 
-    // Find the chef
-    $chef = Chefs::findOrFail($id);
+        // Find the chef
+        $chef = Chefs::findOrFail($id);
 
-    // Handle image upload if new file is provided
-    if ($request->hasFile('chef_picture')) {
-        // Delete old image if it exists
-        if ($chef->chef_picture && file_exists(public_path('Chefs/chefs_pictures/' . $chef->chef_picture))) {
-            unlink(public_path('Chefs/chefs_pictures/' . $chef->chef_picture));
+        // Handle image upload if new file is provided
+        if ($request->hasFile('chef_picture')) {
+            // Delete old image if it exists
+            if ($chef->chef_picture && file_exists(public_path('Chefs/chefs_pictures/' . $chef->chef_picture))) {
+                unlink(public_path('Chefs/chefs_pictures/' . $chef->chef_picture));
+            }
+
+            // Upload new image
+            $file = $request->file('chef_picture');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('Chefs/chefs_pictures'), $fileName);
+            $validatedData['chef_picture'] = $fileName;
+        } else {
+            // Keep existing image if no new file uploaded
+            $validatedData['chef_picture'] = $chef->chef_picture;
         }
 
-        // Upload new image
-        $file = $request->file('chef_picture');
-        $fileName = time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('Chefs/chefs_pictures'), $fileName);
-        $validatedData['chef_picture'] = $fileName;
-    } else {
-        // Keep existing image if no new file uploaded
-        $validatedData['chef_picture'] = $chef->chef_picture;
+        // Update chef record
+        $chef->update($validatedData);
+
+        // Redirect with success message
+        return redirect()->route('chef.show')->with('success', 'Chef updated successfully');
     }
-
-    // Update chef record
-    $chef->update($validatedData);
-
-    // Redirect with success message
-    return redirect()->route('chef.show')->with('success', 'Chef updated successfully');
-}
     /**
      * Remove the specified resource from storage.
      */
@@ -120,7 +125,8 @@ class ChefsController extends Controller
 
         $chef = Chefs::findOrFail($id);
         // Delete old image if it exists
-        if ($chef->chef_picture && file_exists(public_path('Chefs/chefs_pictures' . $chef->chef_picture))
+        if (
+            $chef->chef_picture && file_exists(public_path('Chefs/chefs_pictures' . $chef->chef_picture))
         ) {
             unlink(public_path('Chefs/chefs_pictures' . $chef->chef_picture));
         }
