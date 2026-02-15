@@ -191,4 +191,19 @@ class AuthController extends Controller
         $request->session()->invalidate();
         return redirect()->route('login.add');
     }
+
+
+
+    // User Profile
+    public function profile()
+    {
+        // 1. Login user ka data lena
+        $user = Auth::user();
+
+        // 2. Usi user ki email se match hone wali bookings fetch karna
+        $bookings = \App\Models\Reservation::where('email', $user->email)->latest()->get();
+
+        // 3. Aik hi view page par dono cheezain bhejna
+        return view('website.user_profile', compact('user', 'bookings'));
+    }
 }

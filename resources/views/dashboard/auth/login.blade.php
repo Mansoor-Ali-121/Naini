@@ -29,7 +29,12 @@
                                         <i class="bi bi-envelope-fill text-danger"></i>
                                     </span>
                                     <input type="email" class="form-control border-start-0 py-2" id="email"
-                                        name="email" value="mansoor1@gmail.com" required>
+                                        name="email" value="{{ old('email') }}" required>
+                                </div>
+                                <div>
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -41,10 +46,15 @@
                                         <i class="bi bi-lock-fill text-danger"></i>
                                     </span>
                                     <input type="password" class="form-control border-start-0 py-2" id="password"
-                                        name="password" value="mansoor@1" required>
+                                        name="password" value="{{old('password')}}" required>
                                     <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                         <i class="bi bi-eye-fill"></i>
                                     </button>
+                                </div>
+                                <div>
+                                    @error('password')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -69,7 +79,7 @@
                                     <a href="#" class="btn btn-outline-danger rounded-circle p-2">
                                         <i class="bi bi-facebook"></i>
                                     </a>
-                                    <a href="{{ route('google.auth') }}" class="btn btn-outline-danger rounded-circle p-2">
+                                    <a href="#" class="btn btn-outline-danger rounded-circle p-2">
                                         <i class="bi bi-google"></i>
                                     </a>
                                     <a href="#" class="btn btn-outline-danger rounded-circle p-2">

@@ -14,7 +14,7 @@ class Reservation extends Model
     'date',
     'time',
     'persons',
-    'status' => 'pending',
+    'status',
     'message'
 ];
 }

@@ -69,26 +69,37 @@
 
                                     <td class="text-center">
                                         @php
-                                            $statusClass = $reservation->status == 'confirmed' ? 'bg-success' : ($reservation->status == 'declined' ? 'bg-danger' : 'bg-warning');
+                                            $statusClass =
+                                                $reservation->status == 'confirmed'
+                                                    ? 'bg-success'
+                                                    : ($reservation->status == 'declined'
+                                                        ? 'bg-danger'
+                                                        : 'bg-warning');
                                         @endphp
-                                        <span class="badge {{ $statusClass }} rounded-pill px-3 py-2 text-uppercase" style="font-size: 0.75rem;">
+                                        <span class="badge {{ $statusClass }} rounded-pill px-3 py-2 text-uppercase"
+                                            style="font-size: 0.75rem;">
                                             {{ $reservation->status }}
                                         </span>
                                     </td>
 
+                                    {{-- Decision --}}
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <form action="{{ route('reservation.update-status', $reservation) }}" method="POST">
+                                            <form action="{{ route('reservation.update-status', $reservation) }}"
+                                                method="POST">
                                                 @csrf @method('PATCH')
-                                                <button type="submit" name="status" value="confirmed" 
-                                                    class="btn btn-sm btn-edit rounded-pill px-3" data-bs-toggle="tooltip" title="Confirm">
+                                                <button type="submit" name="status" value="confirmed"
+                                                    class="btn btn-sm btn-edit rounded-pill px-3" data-bs-toggle="tooltip"
+                                                    title="Confirm">
                                                     <i class="bi bi-check-circle text-success"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('reservation.update-status', $reservation) }}" method="POST">
+                                            <form action="{{ route('reservation.update-status', $reservation) }}"
+                                                method="POST">
                                                 @csrf @method('PATCH')
-                                                <button type="submit" name="status" value="declined" 
-                                                    class="btn btn-sm btn-delete rounded-pill px-3" data-bs-toggle="tooltip" title="Decline">
+                                                <button type="submit" name="status" value="declined"
+                                                    class="btn btn-sm btn-delete rounded-pill px-3" data-bs-toggle="tooltip"
+                                                    title="Decline">
                                                     <i class="bi bi-x-circle text-danger"></i>
                                                 </button>
                                             </form>
@@ -98,13 +109,16 @@
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
                                             <a href="{{ route('reservation.edit', $reservation->id) }}"
-                                                class="btn btn-sm btn-edit rounded-pill px-3" data-bs-toggle="tooltip" title="Edit">
+                                                class="btn btn-sm btn-edit rounded-pill px-3" data-bs-toggle="tooltip"
+                                                title="Edit">
                                                 <i class="bi bi-pencil-square text-primary"></i>
                                             </a>
-                                            <form action="{{ route('reservation.delete', $reservation->id) }}" method="POST">
+                                            <form action="{{ route('reservation.delete', $reservation->id) }}"
+                                                method="POST">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-delete rounded-pill px-3" 
-                                                    onclick="return confirm('Delete this reservation?')" data-bs-toggle="tooltip" title="Delete">
+                                                <button type="submit" class="btn btn-sm btn-delete rounded-pill px-3"
+                                                    onclick="return confirm('Delete this reservation?')"
+                                                    data-bs-toggle="tooltip" title="Delete">
                                                     <i class="bi bi-trash3 text-danger"></i>
                                                 </button>
                                             </form>
@@ -139,15 +153,26 @@
             background-color: rgba(52, 152, 219, 0.15);
         }
 
-        .btn-edit, .btn-delete {
+        .btn-edit,
+        .btn-delete {
             background: #fff;
             border: 1px solid #eee;
             transition: all 0.2s;
         }
 
-        .btn-edit:hover { background: #eef6ff; border-color: #3498db; }
-        .btn-delete:hover { background: #fff5f5; border-color: #e74c3c; }
+        .btn-edit:hover {
+            background: #eef6ff;
+            border-color: #3498db;
+        }
 
-        .badge { font-weight: 500; letter-spacing: 0.3px; }
+        .btn-delete:hover {
+            background: #fff5f5;
+            border-color: #e74c3c;
+        }
+
+        .badge {
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
     </style>
 @endsection

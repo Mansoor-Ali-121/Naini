@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Events extends Model
 {
     protected $fillable = [
-        
-        'name', 
+        'name',
         'description',
-        'price', 
+        'date',        // Naya column
+        'location',    // Naya column
+        'category',    // Naya column
+        'host_name',   // Naya column
+        'organizer',   // Naya column
+        'guests',      // Naya column
+        'price',
+        'slug',
         'image'
     ];
 }

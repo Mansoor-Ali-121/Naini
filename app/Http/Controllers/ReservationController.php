@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationStatusMail;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -28,7 +30,7 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        $ValidatedData = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:15',
@@ -37,9 +39,13 @@ class ReservationController extends Controller
             'time' => 'required|date_format:H:i',
             'persons' => 'required|integer|min:1',
         ]);
-        // Prepare data for saving
-        Reservation::create($ValidatedData);
-        // Redirect back with success message
+
+        // YAHAN CHANGE HAI: Reservation create karke variable mein save karein
+        $reservation = Reservation::create($validatedData);
+        $mailMessage = "Humein aapki reservation mil gayi hai! Hum jald hi check karke aapko update denge.";
+
+        Mail::to($reservation->email)->send(new ReservationStatusMail($reservation, $mailMessage));
+
         return redirect()->route('reservation.add')->with('success', 'Reservation created successfully.');
     }
 
@@ -53,21 +59,32 @@ class ReservationController extends Controller
     }
 
 
-// UPdate status
+    // UPdate status Mail 
     public function updateStatus(Request $request, string $id)
     {
         $validatedData = $request->validate([
-            'status' => 'required|string|in:pending,accepted,rejected',
+            'status' => 'required|string|in:pending,confirmed,declined', // Dashboard ki values
         ]);
 
-        // Find the reservation and update it
-        $reservation = Reservation::find($id);  
+        // 1. Reservation find karein aur update karein
+        $reservation = Reservation::findOrFail($id);
         $reservation->update($validatedData);
 
-        // Redirect back with success message
-        return redirect()->route('reservation.show')->with('success', 'Reservation status updated successfully.');
-    }
+        // 2. Decision ke mutabiq email ka message tayyar karein
+        if ($reservation->status == 'confirmed') {
+            $mailMessage = "Congratulations! Your reservation has been confirmed. We'll be waiting for you.";
+        } else {
+            $mailMessage = "Sorry! We cannot accept your reservation at this time. Please contact us for more details.";
+        }
 
+        // 3. User ko email bhejein (Mail class aur Message pass karein)
+        Mail::to($reservation->email)->send(new \App\Mail\ReservationStatusMail($reservation, $mailMessage));
+
+        // 4. Redirect back
+        return redirect()->route('reservation.show')->with('success', 'Status updated and email sent to ' . $reservation->email);
+    }
+    
+    
     /**
      * Show the form for editing the specified resource.
      */

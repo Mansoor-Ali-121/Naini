@@ -23,34 +23,43 @@ class EventsController extends Controller
         //
     }
 
-    
+
     public function store(Request $request)
     {
         // Validate request data
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|regex:/^\$?\d+(\.\d{1,2})?$/',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'price'       => 'required|regex:/^\$?\d+(\.\d{1,2})?$/',
+            'image'       => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            // Naye fields ki validation
+            'slug'        => 'required|string|max:255|unique:events,slug',
+            'date'        => 'required|date',
+            'location'    => 'nullable|string|max:255',
+            'category'    => 'nullable|string|max:100',
+            'host_name'   => 'nullable|string|max:255',
+            'organizer'   => 'nullable|string|max:255',
+            'guests'      => 'nullable|integer|min:1',
         ]);
-    
+
         // Process price - remove dollar sign and convert to float
         $validatedData['price'] = (float) str_replace('$', '', $validatedData['price']);
-    
+
         // Handle image upload (matches your blade file structure)
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time().'.'.$image->getClientOriginalExtension();
-            
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
             // Store image in public directory as per your blade file's path
             $image->move(public_path('Events/events_pictures'), $imageName);
             $validatedData['image'] = $imageName;
         }
-    
+
         // Create new event
         Events::create($validatedData);
-    
-        return redirect()->route('events.add')->with('success', 'Event created successfully!');
+
+        return redirect()->route('events.show')->with('success', 'Event created successfully!');
     }
     /**
      * Display the specified resource.
@@ -89,8 +98,8 @@ class EventsController extends Controller
         // Handle image upload (matches your blade file structure)
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time().'.'.$image->getClientOriginalExtension();
-            
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
             // Store image in public directory as per your blade file's path
             $image->move(public_path('Events/events_pictures'), $imageName);
             $validatedData['image'] = $imageName;

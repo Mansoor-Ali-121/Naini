@@ -1,113 +1,23 @@
 <?php
 
-use App\Models\Chefs;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthContrller;
-use App\Http\Controllers\WebController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\ChefsController;
-use App\Http\Controllers\EventsController;
-use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ContactsController;
-use App\Http\Controllers\GoogleAuthController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\SubcatController;
-use App\Http\Controllers\WorkersController;
+use App\Http\Controllers\{
+    WebController,
+    AuthController,
+    MenuController,
+    ChefsController,
+    EventsController,
+    GalleryController,
+    CategoryController,
+    ContactsController,
+    ReservationController,
+    SubcatController,
+    WorkersController
+};
 
-// Route::get('/',[WebController::class,'website']);
-// Route::get('/',[WebController::class,'dashboard'])->name('dashboard');
-Route::get('/admin', [WebController::class, 'dashboard']);
-
-// Menu-Routes
-
-Route::get('/menu/add', [MenuController::class, 'index'])->name('menu.add');
-Route::post('/menu/add', [MenuController::class, 'store']);
-Route::get('/menu/show', [MenuController::class, 'show'])->name('menu.show');
-Route::get('/menu/edit/{id}', [MenuController::class, 'edit'])->name('menu.edit');
-Route::patch('/menu/update/{id}', [MenuController::class, 'update'])->name('menu.update');
-Route::delete('/menu/delete/{id}', [MenuController::class, 'destroy'])->name('menu.delete');
-
-// Categories-Routes
-
-Route::get('/category/add', [CategoryController::class, 'index'])->name('category.add');
-Route::post('/category/add', [CategoryController::class, 'store']);
-Route::get('/category/show', [CategoryController::class, 'show'])->name('category.show');
-Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-Route::patch('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
-Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
-
-// Subcategory-Routes
-Route::prefix('subcategory')->group(function () {
-
-    Route::get('/add', [SubcatController::class, 'index'])->name('subcategory.add');
-    Route::post('/add', [SubcatController::class, 'store']);
-    Route::get('/show', [SubcatController::class, 'show'])->name('subcategory.show');
-    Route::get('/edit/{id}', [SubcatController::class, 'edit'])->name('subcategory.edit');
-    Route::patch('/update/{id}', [SubcatController::class, 'update'])->name('subcategory.update');
-    Route::delete('/delete/{id}', [SubcatController::class, 'destroy'])->name('subcategory.delete');
-});
-
-// Workers-Routes
-Route::prefix('workers')->group(function () {
-
-    Route::get('/add', [WorkersController::class, 'index'])->name('workers.add');
-    Route::post('/add', [WorkersController::class, 'store']);
-    Route::get('/show', [WorkersController::class, 'show'])->name('workers.show');
-    Route::get('/edit/{id}', [WorkersController::class, 'edit'])->name('workers.edit');
-    Route::patch('/update/{id}', [WorkersController::class, 'update'])->name('workers.update');
-    Route::delete('/delete/{id}', [WorkersController::class, 'destroy'])->name('workers.delete');
-});
-
-// Chefs-Routes
-
-Route::get('/chef/add', [ChefsController::class, 'index'])->name('chef.add');
-Route::post('/chef/add', [ChefsController::class, 'store']);
-Route::get('/chef/show', [ChefsController::class, 'show'])->name('chef.show');
-Route::get('/chef/edit/{id}', [ChefsController::class, 'edit'])->name('chef.edit');
-Route::put('/chef/update/{id}', [ChefsController::class, 'update'])->name('chef.update');
-Route::delete('/chef/delete/{id}', [ChefsController::class, 'destroy'])->name('chef.delete');
-
-// Events-Routes
-Route::prefix('events')->group(function () {
-
-    Route::get('/add', [EventsController::class, 'index'])->name('events.add');
-    Route::post('/add', [EventsController::class, 'store']);
-    Route::get('/show', [EventsController::class, 'show'])->name('events.show');
-    Route::get('/edit/{id}', [EventsController::class, 'edit'])->name('events.edit');
-    Route::patch('/update/{id}', [EventsController::class, 'update'])->name('events.update');
-    Route::delete('/delete/{id}', [EventsController::class, 'destroy'])->name('events.delete');
-});
-
-// Gallery-Routes 
-
-Route::prefix('gallery')->group(function () {
-
-    Route::get('/add', [GalleryController::class, 'index'])->name('gallery.add');
-    Route::post('/add', [GalleryController::class, 'store']);
-    Route::get('/show', [GalleryController::class, 'show'])->name('gallery.show');
-    Route::get('/edit/{id}', [GalleryController::class, 'edit'])->name('gallery.edit');
-    Route::patch('/update/{id}', [GalleryController::class, 'update'])->name('gallery.update');;
-    Route::delete('/delete/{id}', [GalleryController::class, 'destroy'])->name('gallery.delete');
-});
-
-// Reservation-Routes
-
-Route::prefix('reservation')->group(function () {
-
-    Route::get('/add', [ReservationController::class, 'index'])->name('reservation.add');
-    Route::post('/add', [ReservationController::class, 'store']);
-    Route::get('/show', [ReservationController::class, 'show'])->name('reservation.show');
-    Route::get('/edit/{id}', [ReservationController::class, 'edit'])->name('reservation.edit');
-    Route::patch('/update/{id}', [ReservationController::class, 'update'])->name('reservation.update');
-    Route::delete('/delete/{id}', [ReservationController::class, 'destroy'])->name('reservation.delete');
-
-    Route::patch('/updateStatus/{id}', [ReservationController::class, 'updateStatus'])->name('reservation.update-status');
-});
-
-// Website routes
-
+// ==========================================
+// 1. PUBLIC ROUTES (Har koi dekh sakta hai)
+// ==========================================
 Route::get('/', [WebController::class, 'website'])->name('website');
 Route::get('/web/menu', [WebController::class, 'menu'])->name('menu');
 Route::get('/web/chefs', [WebController::class, 'chefs'])->name('chefs');
@@ -115,41 +25,132 @@ Route::get('/web/events', [WebController::class, 'events'])->name('events');
 Route::get('/web/gallery', [WebController::class, 'gallery'])->name('gallery');
 Route::get('/web/about', [WebController::class, 'about'])->name('about');
 
-// Contacts routes
+// CONTACTS (Website Form)
+Route::get('/contacts/add', [ContactsController::class, 'index'])->name('contacts.add');
+Route::post('/contacts/add', [ContactsController::class, 'store']);
 
-Route::prefix('contacts')->group(function () {
+// RESERVATION (Website Form)
+Route::get('/reservation/add', [ReservationController::class, 'index'])->name('reservation.add');
+Route::post('/reservation/add', [ReservationController::class, 'store'])->name('reservation.store');
 
-    Route::get('/add', [ContactsController::class, 'index'])->name('contacts.add');
-    Route::post('/add', [ContactsController::class, 'store']);
-    Route::get('/show', [ContactsController::class, 'show'])->name('contacts.show');
-    Route::get('/edit/{id}', [ContactsController::class, 'edit'])->name('contacts.edit');
-    Route::patch('/update/{id}', [ContactsController::class, 'update'])->name('contacts.update');
-    Route::delete('/delete/{id}', [ContactsController::class, 'destroy'])->name('contacts.delete');
+// Guest only routes (Login/Register)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'loginform'])->name('login.add');
+    Route::post('/login', [AuthController::class, 'authentication']);
+    Route::get('/register/add', [AuthController::class, 'register'])->name('register.add');
+    Route::post('/register/add', [AuthController::class, 'store']);
 });
 
-// Authentication routes
-
-// Register form
-
-Route::get('/register/add', [AuthController::class, 'register'])->name('register.add');
-Route::post('/register/add', [AuthController::class, 'store']);
-Route::get('/register/show', [AuthController::class, 'show'])->name('register.show');
-Route::get('/register/edit{id}', [AuthController::class, 'edit'])->name('register.edit');
-Route::patch('/register/update/{id}', [AuthController::class, 'update'])->name('register.update');
-Route::delete('/register/delete/{id}', [AuthController::class, 'delete'])->name('register.delete');
-
-// Login routes
-
-Route::get('/login', [AuthController::class, 'loginform'])->name('login.add');
-Route::post('/login', [AuthController::class, 'authentication']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Admin routes
 
-Route::get('/admin', [AuthController::class, 'adminDashboard'])->name('admin.dashboard');
-Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+// ==========================================
+// 2. LOGGED-IN USER ROUTES (Admin + Customer Dono Ke Liye)
+// ==========================================
+// Ye routes Admin group se BAHAR hain taake normal user ko error na aaye
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile'])->name('user.profile');
+    Route::get('/my-reservations', [ReservationController::class, 'userBookings'])->name('user.reservations');
+});
 
-// Google route 
 
-Route::get('/google/redirect', [GoogleAuthController::class, 'index'])->name('google.auth');
-Route::get('/google/callback', [GoogleAuthController::class, 'verify'])->name('google.auth');
+// ==========================================
+// 3. ADMIN PROTECTED ROUTES (Sirf Admin Ke Liye)
+// ==========================================
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    // Admin Dashboard Main
+    Route::get('/admin', [WebController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+
+    // Menu Management
+    Route::prefix('menu')->group(function () {
+        Route::get('/add', [MenuController::class, 'index'])->name('menu.add');
+        Route::post('/add', [MenuController::class, 'store']);
+        Route::get('/show', [MenuController::class, 'show'])->name('menu.show');
+        Route::get('/edit/{id}', [MenuController::class, 'edit'])->name('menu.edit');
+        Route::patch('/update/{id}', [MenuController::class, 'update'])->name('menu.update');
+        Route::delete('/delete/{id}', [MenuController::class, 'destroy'])->name('menu.delete');
+    });
+
+    // Category Management
+    Route::prefix('category')->group(function () {
+        Route::get('/add', [CategoryController::class, 'index'])->name('category.add');
+        Route::post('/add', [CategoryController::class, 'store']);
+        Route::get('/show', [CategoryController::class, 'show'])->name('category.show');
+        Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+        Route::patch('/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+    });
+
+    // Subcategory Management
+    Route::prefix('subcategory')->group(function () {
+        Route::get('/add', [SubcatController::class, 'index'])->name('subcategory.add');
+        Route::post('/add', [SubcatController::class, 'store']);
+        Route::get('/show', [SubcatController::class, 'show'])->name('subcategory.show');
+        Route::get('/edit/{id}', [SubcatController::class, 'edit'])->name('subcategory.edit');
+        Route::patch('/update/{id}', [SubcatController::class, 'update'])->name('subcategory.update');
+        Route::delete('/delete/{id}', [SubcatController::class, 'destroy'])->name('subcategory.delete');
+    });
+
+    // Workers & Chefs
+    Route::prefix('workers')->group(function () {
+        Route::get('/add', [WorkersController::class, 'index'])->name('workers.add');
+        Route::post('/add', [WorkersController::class, 'store']);
+        Route::get('/show', [WorkersController::class, 'show'])->name('workers.show');
+        Route::get('/edit/{id}', [WorkersController::class, 'edit'])->name('workers.edit');
+        Route::patch('/update/{id}', [WorkersController::class, 'update'])->name('workers.update');
+        Route::delete('/delete/{id}', [WorkersController::class, 'destroy'])->name('workers.delete');
+    });
+
+    Route::prefix('chef')->group(function () {
+        Route::get('/add', [ChefsController::class, 'index'])->name('chef.add');
+        Route::post('/add', [ChefsController::class, 'store']);
+        Route::get('/show', [ChefsController::class, 'show'])->name('chef.show');
+        Route::get('/edit/{id}', [ChefsController::class, 'edit'])->name('chef.edit');
+        Route::put('/update/{id}', [ChefsController::class, 'update'])->name('chef.update');
+        Route::delete('/delete/{id}', [ChefsController::class, 'destroy'])->name('chef.delete');
+    });
+
+    // Events & Gallery
+    Route::prefix('events')->group(function () {
+        Route::get('/add', [EventsController::class, 'index'])->name('events.add');
+        Route::post('/add', [EventsController::class, 'store']);
+        Route::get('/show', [EventsController::class, 'show'])->name('events.show');
+        Route::get('/edit/{id}', [EventsController::class, 'edit'])->name('events.edit');
+        Route::patch('/update/{id}', [EventsController::class, 'update'])->name('events.update');
+        Route::delete('/delete/{id}', [EventsController::class, 'destroy'])->name('events.delete');
+    });
+
+    Route::prefix('gallery')->group(function () {
+        Route::get('/add', [GalleryController::class, 'index'])->name('gallery.add');
+        Route::post('/add', [GalleryController::class, 'store']);
+        Route::get('/show', [GalleryController::class, 'show'])->name('gallery.show');
+        Route::get('/edit/{id}', [GalleryController::class, 'edit'])->name('gallery.edit');
+        Route::patch('/update/{id}', [GalleryController::class, 'update'])->name('gallery.update');
+        Route::delete('/delete/{id}', [GalleryController::class, 'destroy'])->name('gallery.delete');
+    });
+
+    // Admin Reservation Control (Show & Status Update)
+    Route::prefix('reservation')->group(function () {
+        Route::get('/show', [ReservationController::class, 'show'])->name('reservation.show');
+        Route::get('/edit/{id}', [ReservationController::class, 'edit'])->name('reservation.edit');
+        Route::patch('/update/{id}', [ReservationController::class, 'update'])->name('reservation.update');
+        Route::delete('/delete/{id}', [ReservationController::class, 'destroy'])->name('reservation.delete');
+        Route::patch('/updateStatus/{id}', [ReservationController::class, 'updateStatus'])->name('reservation.update-status');
+    });
+
+    // Contacts (Admin View)
+    Route::prefix('contacts')->group(function () {
+        Route::get('/show', [ContactsController::class, 'show'])->name('contacts.show');
+        Route::delete('/delete/{id}', [ContactsController::class, 'destroy'])->name('contacts.delete');
+    });
+
+    // User Management
+    Route::prefix('register')->group(function () {
+        Route::get('/show', [AuthController::class, 'show'])->name('register.show');
+        Route::get('/edit/{id}', [AuthController::class, 'edit'])->name('register.edit');
+        Route::patch('/update/{id}', [AuthController::class, 'update'])->name('register.update');
+        Route::delete('/delete/{id}', [AuthController::class, 'delete'])->name('register.delete');
+    });
+});
