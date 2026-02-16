@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
+        $middleware->redirectGuestsTo(fn () => route('login.add'));
         // If you need to add global middleware, you would do it like this:
         // $middleware->web(append: [
         //     \App\Http\Middleware\SomeGlobalMiddleware::class,

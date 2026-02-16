@@ -39,30 +39,55 @@
         <div class="container position-relative d-flex align-items-center justify-content-between">
             <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto me-xl-0">
                 <div class="logo-box">
-                    <h1 class="sitename animate-logo">Saj<span>jad</span></h1>
+                    <h1 class="sitename animate-logo">nai<span>ni</span></h1>
                     <span class="tagline">RESTAURANT</span>
                 </div>
             </a>
 
+            {{-- navbar  --}}
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="{{ url('/') }}" class="active">Home<br></a></li>
-                    <li><a href="{{ route('about') }}">About</a></li>
-                    <li><a href="{{ route('menu') }}">Menu</a></li>
-                    <li><a href="{{ route('events') }}">Events</a></li>
-                    <li><a href="{{ route('chefs') }}">Chefs</a></li>
-                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
-                    {{-- <li><a href="{{route('Signup')}}">Sign Up</a></li> --}}
+                    <li>
+                        <a href="{{ url('/') }}" class="{{ Route::is('website') ? 'active' : '' }}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('about') }}" class="{{ Route::is('about') ? 'active' : '' }}">About</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('menu') }}" class="{{ Route::is('menu') ? 'active' : '' }}">Menu</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('events') }}" class="{{ Route::is('events') ? 'active' : '' }}">Events</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('chefs') }}" class="{{ Route::is('chefs') ? 'active' : '' }}">Chefs</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('gallery') }}"
+                            class="{{ Route::is('gallery') ? 'active' : '' }}">Gallery</a>
+                    </li>
+
                     @guest
-                        <li><a href="{{ route('login.add') }}">Login</a></li>
+                        <li>
+                            <a href="{{ route('login.add') }}"
+                                class="{{ Route::is('login.add') ? 'active' : '' }}">Login</a>
+                        </li>
                     @endguest
 
                     @auth
-                        <li><a href="{{ route('user.profile') }}">Profile</a></li>
-                        <li><a href="{{ route('logout') }}">Logout</a></li>
+                        <li>
+                            <a href="{{ route('user.profile') }}"
+                                class="{{ Route::is('user.profile') ? 'active' : '' }}">Profile</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('logout') }}">Logout</a>
+                        </li>
                     @endauth
-                    <li><a href="{{ route('contacts.add') }}">Contact</a></li>
 
+                    <li>
+                        <a href="{{ route('contacts.add') }}"
+                            class="{{ Route::is('contacts.add') ? 'active' : '' }}">Contact</a>
+                    </li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
@@ -74,6 +99,7 @@
 
     @yield('main_website')
 
+{{-- Footer Section --}}
     <footer id="footer" class="footer dark-background">
 
         <div class="container">
