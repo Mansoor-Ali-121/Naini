@@ -14,6 +14,7 @@ use App\Http\Controllers\{
     SubcatController,
     WorkersController
 };
+use App\Http\Controllers\CartController;
 
 // ==========================================
 // 1. PUBLIC ROUTES (Har koi dekh sakta hai)
@@ -53,6 +54,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-reservations', [ReservationController::class, 'userBookings'])->name('user.reservations');
 });
 
+
+// Cart ke mukammal routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+
+// Add Item (Plus Button)
+Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+
+// Update Item
+Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+// Remove Item
+Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 // ==========================================
 // 3. ADMIN PROTECTED ROUTES (Sirf Admin Ke Liye)

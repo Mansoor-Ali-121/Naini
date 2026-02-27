@@ -92,6 +92,14 @@
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
 
+
+            {{-- cart  --}}
+            <a href="{{ route('cart') }}" class="position-relative me-3">
+                <i class="bi bi-cart fs-4 text-dark"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ count((array) session('cart')) }}
+                </span>
+            </a>
             <a class="btn-getstarted" href="{{ route('reservation.add') }}">Book a Table</a>
 
         </div>
@@ -99,7 +107,7 @@
 
     @yield('main_website')
 
-{{-- Footer Section --}}
+    {{-- Footer Section --}}
     <footer id="footer" class="footer dark-background">
 
         <div class="container">
