@@ -3,7 +3,6 @@
     <style>
         .profile-section {
             min-height: 80vh;
-            /* Is se footer hamesha neche rahega */
             padding-top: 140px;
             padding-bottom: 60px;
             background-color: #f8f9fa;
@@ -18,7 +17,6 @@
         .profile-card {
             background: #fff;
             border-left: 5px solid #ce1212;
-            /* Aapki theme ka red color */
         }
 
         .booking-card {
@@ -38,6 +36,11 @@
             background-color: #198754;
             color: #fff;
         }
+
+        .badge-paid {
+            background-color: #0d6efd;
+            color: #fff;
+        }
     </style>
 
     <div class="profile-section">
@@ -45,7 +48,7 @@
             <div class="section-header text-center mb-5">
                 <h2 style="font-family: 'Amatic SC', sans-serif; font-size: 50px;">Welcome Back, <span
                         style="color: #ce1212;">{{ $user->name }}</span></h2>
-                <p>Manage your account details and track your restaurant reservations.</p>
+                <p>Manage your account details, reservations, and orders.</p>
             </div>
 
             <div class="row">
@@ -69,8 +72,9 @@
                     </div>
                 </div>
 
-                <div class="col-lg-8 mb-4">
-                    <div class="card booking-card p-4 shadow-sm h-100">
+                <div class="col-lg-8">
+                    {{-- Reservations Table --}}
+                    <div class="card booking-card p-4 shadow-sm mb-4">
                         <h4 class="mb-4"><i class="bi bi-calendar-check me-2"></i> My Reservations</h4>
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">
@@ -101,11 +105,58 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center py-4">
-                                                <i class="bi bi-emoji-frown d-block mb-2"
-                                                    style="font-size: 30px; color: #ccc;"></i>
-                                                No reservations found. <a href="{{ route('reservation.add') }}#book-a-table"
-                                                    class="text-danger">Book a table now?</a>
+                                            <td colspan="4" class="text-center py-4 text-muted">No reservations found.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- Food Orders Table --}}
+                    <div class="card booking-card p-4 shadow-sm">
+                        <h4 class="mb-4"><i class="bi bi-bag-check me-2 text-danger"></i> My Food Orders</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Items</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($orders as $order)
+                                        <tr>
+                                            <td class="fw-bold">#{{ $order->id }}</td>
+                                            <td>
+                                                {{-- Yahan Relationship use ho rahi hai JSON ki jagah --}}
+                                                @foreach ($order->items as $item)
+                                                    <small class="d-block text-muted">
+                                                        • {{ $item->menu->name ?? 'Unknown Item' }}
+                                                        (x{{ $item->quantity }})
+                                                    </small>
+                                                @endforeach
+                                            </td>
+                                            <td class="fw-bold text-dark">{{ $order->currency }}
+                                                {{ number_format($order->total_amount, 2) }}
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-paid">
+                                                    <i class="bi bi-patch-check-fill me-1"></i>
+                                                    {{ ucfirst($order->payment_status) }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $order->created_at->format('d M, Y') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                No orders found. <a href="{{ route('menu') }}"
+                                                    class="text-danger">Order now?</a>
                                             </td>
                                         </tr>
                                     @endforelse

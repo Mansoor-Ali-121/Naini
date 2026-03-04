@@ -15,8 +15,8 @@
         }
 
         .cart-img {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             object-fit: cover;
             border-radius: 10px;
         }
@@ -25,36 +25,66 @@
             background: #fff;
             border-radius: 15px;
             border-left: 5px solid #ce1212;
+            position: sticky;
+            top: 100px;
+        }
+
+        .qty-input {
+            max-width: 120px;
+        }
+
+        .qty-input .btn {
+            background: #fff;
+            border: 1px solid #ced4da;
+            color: #ce1212;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .qty-input .form-control {
+            text-align: center;
+            font-weight: bold;
+            border-left: 0;
+            border-right: 0;
+            height: 35px;
+        }
+
+        .currency-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
         }
     </style>
 
     <div class="cart-section">
         <div class="container">
             <div class="section-header text-center mb-5">
-                <h2 style="font-family: 'Amatic SC', sans-serif; font-size: 50px;">Your <span style="color: #ce1212;">Shopping
-                        Cart</span></h2>
-                <p>Review your selected Mediterranean flavors before checkout.</p>
+                <h2 style="font-family: 'Amatic SC', sans-serif; font-size: clamp(35px, 10vw, 50px);">Your <span
+                        style="color: #ce1212;">Shopping Cart</span></h2>
             </div>
 
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card shadow-sm p-4 border-0 mb-4">
-                        <div class="table-responsive">
+            <form action="{{ route('checkout') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="table-responsive border-0">
                             <table class="table align-middle table-cart">
                                 <thead>
                                     <tr>
                                         <th>Dish</th>
                                         <th>Price</th>
-                                        <th style="width: 150px;">Quantity</th>
+                                        <th>Quantity</th>
                                         <th>Subtotal</th>
-                                        <th></th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -62,28 +92,32 @@
                                     @if (session('cart'))
                                         @foreach (session('cart') as $id => $details)
                                             @php $total += $details['price'] * $details['quantity'] @endphp
-                                            {{-- FIX: data-id yahan TR mein hona chahiye --}}
                                             <tr data-id="{{ $id }}">
-                                                <td>
+                                                <td data-label="Dish">
                                                     <div class="d-flex align-items-center">
                                                         <img src="{{ asset('Menus/menu_picture/' . $details['image']) }}"
-                                                            class="cart-img me-3" alt="{{ $details['name'] }}">
+                                                            class="cart-img me-3">
                                                         <span class="fw-bold">{{ $details['name'] }}</span>
                                                     </div>
                                                 </td>
-                                                <td>{{ env('MY_CURRENCY_SYMBOL', '$') }}{{ number_format($details['price'], 2) }}
+                                                <td data-label="Price" class="item-price"
+                                                    data-base-price="{{ $details['price'] }}">
+                                                    $ {{ number_format($details['price'], 2) }}
                                                 </td>
-                                                <td>
-                                                    {{-- FIX: quantity class add ki hai --}}
-                                                    <input type="number" value="{{ $details['quantity'] }}"
-                                                        class="form-control quantity update-cart" min="1">
+                                                <td data-label="Quantity">
+                                                    <div class="input-group qty-input">
+                                                        <button class="btn btn-minus" type="button">-</button>
+                                                        <input type="text" class="form-control quantity"
+                                                            value="{{ $details['quantity'] }}" readonly>
+                                                        <button class="btn btn-plus" type="button">+</button>
+                                                    </div>
                                                 </td>
-                                                <td class="fw-bold">
-                                                    {{ env('MY_CURRENCY_SYMBOL', '$') }}{{ number_format($details['price'] * $details['quantity'], 2) }}
+                                                <td data-label="Subtotal" class="fw-bold text-danger item-subtotal">
+                                                    $ {{ number_format($details['price'] * $details['quantity'], 2) }}
                                                 </td>
-                                                <td>
+                                                <td data-label="Remove">
                                                     <a href="{{ route('cart.remove', $id) }}"
-                                                        class="btn btn-outline-danger btn-sm">
+                                                        class="btn btn-outline-danger btn-sm rounded-pill">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
                                                 </td>
@@ -91,10 +125,9 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center py-5">
-                                                <i class="bi bi-cart-x text-muted" style="font-size: 40px;"></i>
-                                                <p class="mt-2">Aapka cart khali hai. <a href="{{ route('menu') }}"
-                                                        class="text-danger">Kuch order karein?</a></p>
+                                            <td colspan="5" class="text-center py-5 border-0">
+                                                <p class="text-muted">Aapka cart khali hai. <a href="{{ route('menu') }}"
+                                                        class="text-danger fw-bold">Order Karein</a></p>
                                             </td>
                                         </tr>
                                     @endif
@@ -102,63 +135,111 @@
                             </table>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-lg-4">
-                    <div class="card total-box p-4 shadow-sm">
-                        <h4 class="mb-4">Order Summary</h4>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span>{{ env('MY_CURRENCY_SYMBOL', '$') }}{{ number_format($total, 2) }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>Tax (Estimated)</span>
-                            <span>{{ env('MY_CURRENCY_SYMBOL', '$') }}0.00</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <strong class="fs-5">Total</strong>
-                            <strong
-                                class="fs-5 text-danger">{{ env('MY_CURRENCY_SYMBOL', '$') }}{{ number_format($total, 2) }}</strong>
+                    <div class="col-lg-4">
+                        <div class="currency-card shadow-sm">
+                            <label class="fw-bold mb-2"><i class="bi bi-currency-exchange me-2"></i> Select Payment
+                                Currency</label>
+                            <select name="currency" id="currency_choice" class="form-select">
+                                <option value="usd" selected>USD (US Dollar - Default)</option>
+                                <option value="pkr">PKR (Pakistani Rupee)</option>
+                            </select>
+                            <small class="text-muted mt-2 d-block">* 1 USD = 280 PKR</small>
                         </div>
 
-                        @auth
-                            <a href="#" class="btn btn-danger w-100 py-3 rounded-pill fw-bold">Proceed to Checkout</a>
-                        @else
-                            <a href="{{ route('login.add') }}"
-                                class="btn btn-outline-danger w-100 py-3 rounded-pill fw-bold">Login to Checkout</a>
-                        @endauth
+                        <div class="card total-box p-4 shadow-sm border-0">
+                            <h4 class="mb-4 fw-bold">Order Summary</h4>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span id="summary-subtotal">$ {{ number_format($total, 2) }}</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-4">
+                                <strong class="fs-5">Total</strong>
+                                <strong class="fs-5 text-danger" id="summary-total">$
+                                    {{ number_format($total, 2) }}</strong>
+                            </div>
 
-                        <a href="{{ route('menu') }}" class="btn btn-link w-100 text-muted mt-2 text-decoration-none">
-                            <i class="bi bi-arrow-left"></i> Continue Dining
-                        </a>
+                            @auth
+                                <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm">Proceed
+                                    to Checkout</button>
+                            @else
+                                <a href="{{ route('login.add') }}"
+                                    class="btn btn-outline-danger w-100 py-3 rounded-pill fw-bold">Login to Checkout</a>
+                            @endauth
+
+                            <a href="{{ route('menu') }}" class="btn btn-link w-100 text-muted mt-2 text-decoration-none">
+                                <i class="bi bi-arrow-left"></i> Continue Dining
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    {{-- Script ko update kiya hai --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-        $(".update-cart").on('change', function(e) {
-            e.preventDefault();
+    <script>
+        const exchangeRate = 280;
 
-            var ele = $(this);
+        $("#currency_choice").change(function() {
+            updateDisplay();
+        });
 
+        $(".btn-plus, .btn-minus").click(function() {
+            var input = $(this).parent().find("input");
+            var currentVal = parseInt(input.val());
+            if ($(this).hasClass('btn-plus')) {
+                input.val(currentVal + 1);
+            } else if (currentVal > 1) {
+                input.val(currentVal - 1);
+            }
+            updateCartAjax(input);
+        });
+
+        function updateDisplay() {
+            var currency = $("#currency_choice").val();
+            var symbol = (currency === 'pkr') ? 'PKR ' : '$ '; // Fix: DB currency format
+            var total = 0;
+
+            $("tr[data-id]").each(function() {
+                var basePrice = parseFloat($(this).find(".item-price").data("base-price"));
+                var qty = parseInt($(this).find(".quantity").val());
+
+                var currentPrice = (currency === 'pkr') ? (basePrice * exchangeRate) : basePrice;
+                var subtotal = currentPrice * qty;
+                total += subtotal;
+
+                $(this).find(".item-price").text(symbol + currentPrice.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                }));
+                $(this).find(".item-subtotal").text(symbol + subtotal.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                }));
+            });
+
+            $("#summary-subtotal").text(symbol + total.toLocaleString(undefined, {
+                minimumFractionDigits: 2
+            }));
+            $("#summary-total").text(symbol + total.toLocaleString(undefined, {
+                minimumFractionDigits: 2
+            }));
+        }
+
+        function updateCartAjax(ele) {
+            var rowId = ele.parents("tr").attr("data-id");
             $.ajax({
                 url: '{{ route('cart.update') }}',
                 method: "patch",
                 data: {
                     _token: '{{ csrf_token() }}',
-                    id: ele.parents("tr").attr("data-id"), // TR se ID uthayega
-                    quantity: ele.val() // Input se value uthayega
+                    id: rowId,
+                    quantity: ele.val()
                 },
-                success: function(response) {
-                    window.location.reload();
+                success: function() {
+                    updateDisplay();
                 }
             });
-        });
+        }
     </script>
-
 @endsection

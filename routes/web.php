@@ -15,6 +15,7 @@ use App\Http\Controllers\{
     WorkersController
 };
 use App\Http\Controllers\CartController;
+use GrahamCampbell\ResultType\Success;
 
 // ==========================================
 // 1. PUBLIC ROUTES (Har koi dekh sakta hai)
@@ -57,15 +58,25 @@ Route::middleware(['auth'])->group(function () {
 
 // Cart ke mukammal routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
-
 // Add Item (Plus Button)
 Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-
 // Update Item
 Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
-
 // Remove Item
 Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+// Stripe Checkout ka route
+Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+// Success Page (Checkout ke baad)
+Route::get('/payment-success', [CartController::class, 'success'])->name('payment.success');
+
+// Agar user payment cancel karke wapis aaye toh kahan jaye
+Route::get('/payment-cancel', function () {
+    return redirect()->route('cart')->with('error', 'Payment was cancelled.');
+})->name('payment.cancel');
+
+// Success Page ke liye naya route (Order Confirmation)
+Route::get('/order-confirmed/{id}', [CartController::class, 'showSuccess'])->name('order.confirmed');
+
 
 // ==========================================
 // 3. ADMIN PROTECTED ROUTES (Sirf Admin Ke Liye)

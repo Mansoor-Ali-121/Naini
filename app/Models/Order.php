@@ -14,7 +14,8 @@ class Order extends Model
         'total_amount',
         'payment_status',
         'stripe_id',
-        'address'
+        'address',
+        'currency' // Naya column jo migration mein add kiya
     ];
 
     // Relationship: Ek Order ke boht saare Items hote hain

@@ -36,75 +36,60 @@
 <body class="index-page">
 
     <header id="header" class="header d-flex align-items-center sticky-top">
-        <div class="container position-relative d-flex align-items-center justify-content-between">
-            <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-                <div class="logo-box">
-                    <h1 class="sitename animate-logo">nai<span>ni</span></h1>
-                    <span class="tagline">RESTAURANT</span>
-                </div>
-            </a>
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-            {{-- navbar  --}}
-            <nav id="navmenu" class="navmenu">
-                <ul>
-                    <li>
-                        <a href="{{ url('/') }}" class="{{ Route::is('website') ? 'active' : '' }}">Home</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('about') }}" class="{{ Route::is('about') ? 'active' : '' }}">About</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('menu') }}" class="{{ Route::is('menu') ? 'active' : '' }}">Menu</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('events') }}" class="{{ Route::is('events') ? 'active' : '' }}">Events</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('chefs') }}" class="{{ Route::is('chefs') ? 'active' : '' }}">Chefs</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('gallery') }}"
-                            class="{{ Route::is('gallery') ? 'active' : '' }}">Gallery</a>
-                    </li>
+        <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+            <div class="logo-box">
+                <h1 class="sitename animate-logo mb-0">nai<span>ni</span></h1>
+                <span class="tagline">RESTAURANT</span>
+            </div>
+        </a>
 
-                    @guest
-                        <li>
-                            <a href="{{ route('login.add') }}"
-                                class="{{ Route::is('login.add') ? 'active' : '' }}">Login</a>
-                        </li>
-                    @endguest
+        <nav id="navmenu" class="navmenu d-flex align-items-center">
+            <ul>
+                <li><a href="{{ url('/') }}" class="{{ Route::is('website') ? 'active' : '' }}">Home</a></li>
+                <li><a href="{{ route('about') }}">About</a></li>
+                <li><a href="{{ route('menu') }}" class="{{ Route::is('menu') ? 'active' : '' }}">Menu</a></li>
+                <li><a href="{{ route('events') }}">Events</a></li>
+                <li><a href="{{ route('chefs') }}">Chefs</a></li>
+                <li><a href="{{ route('gallery') }}">Gallery</a></li>
 
-                    @auth
-                        <li>
-                            <a href="{{ route('user.profile') }}"
-                                class="{{ Route::is('user.profile') ? 'active' : '' }}">Profile</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('logout') }}">Logout</a>
-                        </li>
-                    @endauth
+                @guest
+                    <li><a href="{{ route('login.add') }}">Login</a></li>
+                @endguest
 
-                    <li>
-                        <a href="{{ route('contacts.add') }}"
-                            class="{{ Route::is('contacts.add') ? 'active' : '' }}">Contact</a>
-                    </li>
-                </ul>
-                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-            </nav>
+                @auth
+                    <li><a href="{{ route('user.profile') }}" class="{{ Route::is('user.profile') ? 'active' : '' }}">Profile</a></li>
+                    <li><a href="{{ route('logout') }}">Logout</a></li>
+                @endauth
 
+                <li><a href="{{ route('contacts.add') }}">Contact</a></li>
+                <li class="d-md-none"><a href="{{ route('reservation.add') }}">Book a Table</a></li>
+            </ul>
 
-            {{-- cart  --}}
-            <a href="{{ route('cart') }}" class="position-relative me-3">
+            <div class="mobile-icons d-flex d-xl-none align-items-center ms-auto">
+                <a href="{{ route('cart') }}" class="position-relative me-3">
+                    <i class="bi bi-cart fs-4 text-dark"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                        {{ count((array) session('cart')) }}
+                    </span>
+                </a>
+                <i class="mobile-nav-toggle bi bi-list fs-2"></i>
+            </div>
+        </nav>
+
+        <div class="header-social-links d-none d-xl-flex align-items-center">
+            <a href="{{ route('cart') }}" class="position-relative me-4">
                 <i class="bi bi-cart fs-4 text-dark"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
                     {{ count((array) session('cart')) }}
                 </span>
             </a>
             <a class="btn-getstarted" href="{{ route('reservation.add') }}">Book a Table</a>
-
         </div>
-    </header>
 
+    </div>
+</header>
     @yield('main_website')
 
     {{-- Footer Section --}}
