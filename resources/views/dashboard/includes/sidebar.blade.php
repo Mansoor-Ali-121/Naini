@@ -168,6 +168,17 @@
                 </ul>
             </li>
 
+            {{-- Orders --}}
+            <li class="sidebar-item dropdown">
+                <a class="sidebar-link dropdown" href="#" id="ordersDropdown" role="button"
+                    data-bs-toggle="dropdown">
+                    <i class="align-middle" data-feather="shopping-cart"></i> <span class="align-middle">Orders</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ordersDropdown">
+                    <li><a class="dropdown-item" href="{{ route('orders.index') }}">View Orders</a></li>
+                    {{-- <li><a class="dropdown-item" href="{{ route('orders.add') }}">Add Order</a></li> --}}
+                </ul>
+
             {{-- Categories --}}
 
             <li class="sidebar-item dropdown">

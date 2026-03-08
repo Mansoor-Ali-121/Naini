@@ -34,7 +34,9 @@
                             <tr>
                                 <th class="py-3 ps-4" style="width: 60px;">#ID</th>
                                 <th class="py-3">Photo</th>
-                                <th class="py-3">Item Name</th> <th class="py-3">Description</th> <th class="py-3">Category/Sub</th>
+                                <th class="py-3">Item Name</th>
+                                <th class="py-3">Description</th>
+                                <th class="py-3">Category/Sub</th>
                                 <th class="py-3">Slug</th>
                                 <th class="py-3 text-center">Price</th>
                                 <th class="py-3 text-center">Actions</th>
@@ -66,23 +68,28 @@
 
                                     <td>
                                         <div class="d-flex flex-column gap-1">
-                                            <span class="badge bg-primary rounded-pill px-2 py-1" style="font-size: 0.7rem; width: fit-content;">
+                                            <span class="badge bg-primary rounded-pill px-2 py-1"
+                                                style="font-size: 0.7rem; width: fit-content;">
                                                 {{ $menu->category->name ?? 'N/A' }}
                                             </span>
-                                            <span class="badge bg-info text-white rounded-pill px-2 py-1" style="font-size: 0.7rem; width: fit-content;">
+                                            <span class="badge bg-info text-white rounded-pill px-2 py-1"
+                                                style="font-size: 0.7rem; width: fit-content;">
                                                 {{ $menu->subcategory->name ?? 'N/A' }}
                                             </span>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <code class="text-primary small" style="background: #f0f3f7; padding: 2px 6px; border-radius: 4px;">
+                                        <code class="text-primary small"
+                                            style="background: #f0f3f7; padding: 2px 6px; border-radius: 4px;">
                                             {{ $menu->actual_slug }}
                                         </code>
                                     </td>
 
                                     <td class="text-center">
-                                        <span class="badge bg-soft-warning text-dark rounded-pill px-3 py-2 border border-warning" style="font-weight: 600;">
+                                        <span
+                                            class="badge bg-soft-warning text-dark rounded-pill px-3 py-2 border border-warning"
+                                            style="font-weight: 600;">
                                             ${{ number_format((float) str_replace(['$', ','], '', $menu->price), 2) }}
                                         </span>
                                     </td>
@@ -90,14 +97,17 @@
                                     <td class="text-center">
                                         <div class="d-flex gap-1 justify-content-center">
                                             <a href="{{ route('menu.edit', $menu->id) }}"
-                                                class="btn btn-sm btn-action rounded-pill px-2" data-bs-toggle="tooltip" title="Edit">
+                                                class="btn btn-sm btn-action rounded-pill px-2" data-bs-toggle="tooltip"
+                                                title="Edit">
                                                 <i class="bi bi-pencil-square text-primary"></i>
                                             </a>
-                                            <form action="{{ route('menu.delete', $menu->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('menu.delete', $menu->id) }}" method="POST"
+                                                class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-action rounded-pill px-2"
-                                                    onclick="return confirm('Delete this item?')" data-bs-toggle="tooltip" title="Delete">
+                                                    onclick="return confirm('Delete this item?')" data-bs-toggle="tooltip"
+                                                    title="Delete">
                                                     <i class="bi bi-trash3 text-danger"></i>
                                                 </button>
                                             </form>
@@ -113,11 +123,32 @@
     </div>
 
     <style>
-        .bg-light-header { background-color: #f8faff !important; border-bottom: 2px solid #edf2f9; }
-        .bg-soft-warning { background-color: rgba(255, 193, 7, 0.1); }
-        .table-hover tbody tr:hover { background-color: rgba(52, 152, 219, 0.03) !important; }
-        .btn-action { background: #fff; border: 1px solid #eee; transition: 0.2s; }
-        .btn-action:hover { border-color: #3498db; background: #f0f7ff; }
-        code { font-size: 0.8rem; }
+        .bg-light-header {
+            background-color: #f8faff !important;
+            border-bottom: 2px solid #edf2f9;
+        }
+
+        .bg-soft-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.03) !important;
+        }
+
+        .btn-action {
+            background: #fff;
+            border: 1px solid #eee;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            border-color: #3498db;
+            background: #f0f7ff;
+        }
+
+        code {
+            font-size: 0.8rem;
+        }
     </style>
 @endsection

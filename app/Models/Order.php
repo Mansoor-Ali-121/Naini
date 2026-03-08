@@ -19,9 +19,14 @@ class Order extends Model
     ];
 
     // Relationship: Ek Order ke boht saare Items hote hain
+    // public function items()
+    // {
+    //     return $this->hasMany(OrderItem::class);
+    // }
+
     public function items()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
     // Relationship: Order kis User ka hai

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
+use App\Models\Order;
+use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,9 +170,26 @@ class AuthController extends Controller
 
     // Dashboard 
 
+    // public function dashboard()
+    // {
+    //     return view('dashboard.auth.dashboard');
+    // }
     public function dashboard()
     {
-        return view('dashboard.auth.dashboard');
+        $data = [
+            'totalRevenue' => Order::sum('total_amount'),
+            'totalOrders' => Order::count(),
+            'menuItems' => Menu::count(),
+            // Dashboard Controller mein nayi cheezein add ki hain taake dashboard zyada informative ho
+            'newCustomers' => User::where('usertype', 'user')
+                ->where('created_at', '>=', now()->subDays(7)) // Sirf pichle 7 din ke users
+                ->count(),
+            'recentOrders' => Order::latest()->take(5)->get(),
+            'reservations' => Reservation::latest()->take(5)->get(),
+            'chartData' => Order::selectRaw('sum(total_amount) as total, DATE(created_at) as date')
+                ->groupBy('date')->orderBy('date', 'DESC')->take(7)->get()
+        ];
+        return view('dashboard.auth.dashboard', $data);
     }
 
     // Currently login admins

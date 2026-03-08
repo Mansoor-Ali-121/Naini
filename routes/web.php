@@ -1,21 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
-    WebController,
-    AuthController,
-    MenuController,
-    ChefsController,
-    EventsController,
-    GalleryController,
-    CategoryController,
-    ContactsController,
-    ReservationController,
-    SubcatController,
-    WorkersController
-};
+use App\Http\Controllers\{WebController, AuthController, MenuController, ChefsController, EventsController, GalleryController, CategoryController, ContactsController, ReservationController, SubcatController, WorkersController};
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use GrahamCampbell\ResultType\Success;
+use Illuminate\Support\Facades\Route;
 
 // ==========================================
 // 1. PUBLIC ROUTES (Har koi dekh sakta hai)
@@ -78,13 +67,19 @@ Route::get('/payment-cancel', function () {
 Route::get('/order-confirmed/{id}', [CartController::class, 'showSuccess'])->name('order.confirmed');
 
 
+// Saare orders ki list dekhne ke liye
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+
+// Ek specific order ki details dekhne ke liye
+Route::get('/order/details/{id}', [OrderController::class, 'showDetails'])->name('orders.details');
+
 // ==========================================
 // 3. ADMIN PROTECTED ROUTES (Sirf Admin Ke Liye)
 // ==========================================
 Route::middleware(['auth', 'admin'])->group(function () {
 
     // Admin Dashboard Main
-    Route::get('/admin', [WebController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin', [AuthController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
     // Menu Management
