@@ -91,11 +91,13 @@
         </div>
 
         <div class="row g-4">
+            {{-- Order section start from here --}}
             <div class="col-xl-7">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 py-3">
+                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
                         <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-receipt me-2 text-danger"></i>Recent Food Orders
                         </h6>
+                        <a href="{{ url('/orders') }}" class="btn btn-sm btn-outline-secondary">View Table</a>
                     </div>
                     <div class="table-responsive px-3">
                         <table class="table table-borderless align-middle">
@@ -123,30 +125,40 @@
                 </div>
             </div>
 
+            {{-- Reservation section start from here --}}
             <div class="col-xl-5">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 py-3">
+                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
                         <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-calendar-check me-2 text-primary"></i>Latest
                             Table Reservations</h6>
+                        <a href="{{ url('/reservations') }}" class="btn btn-sm btn-outline-secondary">View Table</a>
                     </div>
                     <div class="px-3 pb-3">
                         @foreach ($reservations as $res)
+                            @php
+                                $status = strtolower($res->status);
+                                $class =
+                                    $status == 'confirmed'
+                                        ? 'style-green'
+                                        : ($status == 'declined'
+                                            ? 'style-red'
+                                            : 'style-yellow');
+                            @endphp
+
                             <div
-                                class="d-flex align-items-center p-3 mb-2 rounded-3 bg-light border-start border-primary border-4">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-0 fw-bold small">{{ $res->name }}</h6>
-                                    <span class="text-muted extra-small">{{ $res->persons }} Guests |
-                                        {{ $res->time }}</span>
+                                class="reservation-card-sync {{ $class }} d-flex align-items-center p-3 mb-2 rounded-3 shadow-sm">
+                                <div class="flex-grow-1 position-relative" style="z-index: 2;">
+                                    <h6 class="mb-0 fw-bold small name-text">{{ $res->name }}</h6>
+                                    <span class="text-muted extra-small info-text">
+                                        {{ $res->persons }} Guests |
+                                        {{ \Carbon\Carbon::parse($res->time)->format('h:i A') }}
+                                    </span>
                                 </div>
-                                <td>
-                                    <span
-                                        class="badge rounded-pill 
-        @if ($res->status == 'pending') bg-warning text-dark 
-        @elseif($res->status == 'confirmed') bg-success text-white 
-        @else bg-danger text-white @endif">
+                                <div style="z-index: 2;">
+                                    <span class="badge rounded-pill custom-badge">
                                         {{ ucfirst($res->status) }}
                                     </span>
-                                </td>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -216,6 +228,90 @@
 
         .extra-small {
             font-size: 0.75rem;
+        }
+
+        /* reservation styling  */
+
+        .reservation-card-sync {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            border-left: 5px solid;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .reservation-card-sync::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .reservation-card-sync:hover::before {
+            left: 0;
+        }
+
+        .reservation-card-sync:hover .name-text,
+        .reservation-card-sync:hover .info-text {
+            color: #fff !important;
+        }
+
+        /* Status Based Styles */
+
+        /* Green (Confirmed) */
+        .style-green {
+            border-left-color: #28a745;
+        }
+
+        .style-green::before {
+            background: linear-gradient(90deg, #28a745, #38ef7d);
+        }
+
+        .style-green .custom-badge {
+            background: #28a745;
+            color: #fff;
+        }
+
+        /* Red (Declined) */
+        .style-red {
+            border-left-color: #dc3545;
+        }
+
+        .style-red::before {
+            background: linear-gradient(90deg, #dc3545, #ff7e5f);
+        }
+
+        .style-red .custom-badge {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        /* Yellow (Pending) - Updated for better visibility */
+        .style-yellow {
+            border-left-color: #ffc107;
+        }
+
+        .style-yellow::before {
+            background: linear-gradient(90deg, #ffc107, #f6d365);
+        }
+
+        /* Badge ka text dark kar diya taake saaf dikhe */
+        .style-yellow .custom-badge {
+            background: #ffc107;
+            color: #212529 !important;
+            /* Dark text for yellow background */
+        }
+
+        /* Jab hover ho, tab bhi text dark rakhein ya white ka contrast check karein */
+        .reservation-card-sync.style-yellow:hover .name-text,
+        .reservation-card-sync.style-yellow:hover .info-text {
+            color: #212529 !important;
+            /* Yellow background par dark text zyada readable hai */
         }
     </style>
 

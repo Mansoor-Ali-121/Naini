@@ -11,7 +11,7 @@ class OrderController extends Controller
     // Saare orders dikhane ke liye
     public function index()
     {
-        $orders = Order::all(); // ya Order::with('user')->get();
+        $orders = Order::paginate(10); // ya Order::with('user')->get();
         return view('dashboard.order.show_order', compact('orders'));
     }
 
