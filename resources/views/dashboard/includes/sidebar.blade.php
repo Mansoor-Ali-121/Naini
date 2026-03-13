@@ -71,7 +71,6 @@
                 animation: text-glow 1.5s ease-in-out infinite alternate;
             }
 
-            /* Active Class Style (Jo aapke sidebar theme ke hisab se best lage) */
             .active-menu-item {
                 background-color: rgba(255, 255, 255, 0.1) !important;
                 border-left: 4px solid #ab0fe9;
@@ -101,8 +100,6 @@
                 }
             }
 
-
-            /* Sidebar items mein slide-in effect */
             .sidebar-link {
                 position: relative;
                 transition: all 0.4s ease-in-out;
@@ -116,7 +113,6 @@
                 color: #fff !important;
             }
 
-            /* Active item ke liye permanent color slide */
             .active-menu-item .sidebar-link {
                 background-position: 0 0;
                 border-left: 4px solid #ab0fe9;
@@ -139,8 +135,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="users"></i> <span class="align-middle">Users</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('register.show') }}">View Users</a></li>
-                    <li><a class="dropdown-item" href="{{ route('register.add') }}">Add User</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('register.show') ? 'active' : '' }}"
+                            href="{{ route('register.show') }}">View Users</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('register.add') ? 'active' : '' }}"
+                            href="{{ route('register.add') }}">Add User</a></li>
                 </ul>
             </li>
 
@@ -148,8 +146,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="coffee"></i> <span class="align-middle">Menu</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('menu.show') }}">View Menu</a></li>
-                    <li><a class="dropdown-item" href="{{ route('menu.add') }}">Add Menu</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('menu.show') ? 'active' : '' }}"
+                            href="{{ route('menu.show') }}">View Menu</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('menu.add') ? 'active' : '' }}"
+                            href="{{ route('menu.add') }}">Add Menu</a></li>
                 </ul>
             </li>
 
@@ -157,7 +157,8 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="shopping-cart"></i> <span class="align-middle">Orders</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('orders.index') }}">View Orders</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('orders.index') ? 'active' : '' }}"
+                            href="{{ route('orders.index') }}">View Orders</a></li>
                 </ul>
             </li>
 
@@ -165,26 +166,32 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="tag"></i> <span class="align-middle">Categories</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('category.show') }}">View Categories</a></li>
-                    <li><a class="dropdown-item" href="{{ route('category.add') }}">Add Categories</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('category.show') ? 'active' : '' }}"
+                            href="{{ route('category.show') }}">View Categories</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('category.add') ? 'active' : '' }}"
+                            href="{{ route('category.add') }}">Add Categories</a></li>
                 </ul>
             </li>
 
             <li class="sidebar-item dropdown {{ request()->routeIs('subcategory.*') ? 'active-menu-item' : '' }}">
-                <a class="sidebar-link" href="#" data-bs-toggle="dropdown"><i class="align-middle"
+                <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="layers"></i> <span class="align-middle">Sub-Categories</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('subcategory.show') }}">View Sub-Categories</a></li>
-                    <li><a class="dropdown-item" href="{{ route('subcategory.add') }}">Add Sub-Categories</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('subcategory.show') ? 'active' : '' }}"
+                            href="{{ route('subcategory.show') }}">View Sub-Categories</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('subcategory.add') ? 'active' : '' }}"
+                            href="{{ route('subcategory.add') }}">Add Sub-Categories</a></li>
                 </ul>
             </li>
 
             <li class="sidebar-item dropdown {{ request()->routeIs('workers.*') ? 'active-menu-item' : '' }}">
-                <a class="sidebar-link" href="#" data-bs-toggle="dropdown"><i class="align-middle"
+                <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="users"></i> <span class="align-middle">Workers</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('workers.show') }}">View Workers</a></li>
-                    <li><a class="dropdown-item" href="{{ route('workers.add') }}">Add Workers</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('workers.show') ? 'active' : '' }}"
+                            href="{{ route('workers.show') }}">View Workers</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('workers.add') ? 'active' : '' }}"
+                            href="{{ route('workers.add') }}">Add Workers</a></li>
                 </ul>
             </li>
 
@@ -192,8 +199,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="award"></i> <span class="align-middle">Chefs</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('chef.show') }}">View Chefs</a></li>
-                    <li><a class="dropdown-item" href="{{ route('chef.add') }}">Add Chefs</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('chef.show') ? 'active' : '' }}"
+                            href="{{ route('chef.show') }}">View Chefs</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('chef.add') ? 'active' : '' }}"
+                            href="{{ route('chef.add') }}">Add Chefs</a></li>
                 </ul>
             </li>
 
@@ -201,8 +210,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="calendar"></i> <span class="align-middle">Events</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('events.show') }}">View Events</a></li>
-                    <li><a class="dropdown-item" href="{{ route('events.add') }}">Add Events</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('events.show') ? 'active' : '' }}"
+                            href="{{ route('events.show') }}">View Events</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('events.add') ? 'active' : '' }}"
+                            href="{{ route('events.add') }}">Add Events</a></li>
                 </ul>
             </li>
 
@@ -210,8 +221,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="image"></i> <span class="align-middle">Gallery</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('gallery.show') }}">View Gallery</a></li>
-                    <li><a class="dropdown-item" href="{{ route('gallery.add') }}">Add Gallery</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('gallery.show') ? 'active' : '' }}"
+                            href="{{ route('gallery.show') }}">View Gallery</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('gallery.add') ? 'active' : '' }}"
+                            href="{{ route('gallery.add') }}">Add Gallery</a></li>
                 </ul>
             </li>
 
@@ -219,8 +232,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="mail"></i> <span class="align-middle">Contacts</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('contacts.show') }}">View Contacts</a></li>
-                    <li><a class="dropdown-item" href="{{ route('contacts.add') }}">Add Contact</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('contacts.show') ? 'active' : '' }}"
+                            href="{{ route('contacts.show') }}">View Contacts</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('contacts.add') ? 'active' : '' }}"
+                            href="{{ route('contacts.add') }}">Add Contact</a></li>
                 </ul>
             </li>
 
@@ -228,8 +243,10 @@
                 <a class="sidebar-link dropdown" href="#" data-bs-toggle="dropdown"><i class="align-middle"
                         data-feather="clock"></i> <span class="align-middle">Reservation</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('reservation.show') }}">View Reservation</a></li>
-                    <li><a class="dropdown-item" href="{{ route('reservation.add') }}">Add Reservation</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('reservation.show') ? 'active' : '' }}"
+                            href="{{ route('reservation.show') }}">View Reservation</a></li>
+                    <li><a class="dropdown-item {{ request()->routeIs('reservation.add') ? 'active' : '' }}"
+                            href="{{ route('reservation.add') }}">Add Reservation</a></li>
                 </ul>
             </li>
 

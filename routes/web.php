@@ -1,88 +1,69 @@
 <?php
 
-use App\Http\Controllers\{WebController, AuthController, MenuController, ChefsController, EventsController, GalleryController, CategoryController, ContactsController, ReservationController, SubcatController, WorkersController};
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrderController;
-use GrahamCampbell\ResultType\Success;
+use App\Http\Controllers\{WebController, AuthController, MenuController, ChefsController, EventsController, GalleryController, CategoryController, ContactsController, ReservationController, SubcatController, WorkersController, CartController, OrderController};
 use Illuminate\Support\Facades\Route;
 
-// ==========================================
-// 1. PUBLIC ROUTES (Har koi dekh sakta hai)
-// ==========================================
+// ==========================================================
+// 1. PUBLIC ROUTES
+// ==========================================================
 Route::get('/', [WebController::class, 'website'])->name('website');
 Route::get('/web/menu', [WebController::class, 'menu'])->name('menu');
 Route::get('/web/chefs', [WebController::class, 'chefs'])->name('chefs');
 Route::get('/web/events', [WebController::class, 'events'])->name('events');
 Route::get('/web/gallery', [WebController::class, 'gallery'])->name('gallery');
 Route::get('/web/about', [WebController::class, 'about'])->name('about');
+// web.php
+Route::get('/web/menu/item/{slug}', [WebController::class, 'itemDetail'])->name('menu.detail');
 
-// CONTACTS (Website Form)
+// CONTACTS & RESERVATION (Public Forms)
 Route::get('/contacts/add', [ContactsController::class, 'index'])->name('contacts.add');
 Route::post('/contacts/add', [ContactsController::class, 'store']);
-
-// RESERVATION (Website Form)
 Route::get('/reservation/add', [ReservationController::class, 'index'])->name('reservation.add');
 Route::post('/reservation/add', [ReservationController::class, 'store'])->name('reservation.store');
 
-// Guest only routes (Login/Register)
+// AUTH ROUTES
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'loginform'])->name('login.add');
     Route::post('/login', [AuthController::class, 'authentication']);
     Route::get('/register/add', [AuthController::class, 'register'])->name('register.add');
     Route::post('/register/add', [AuthController::class, 'store']);
 });
-
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// ==========================================
-// 2. LOGGED-IN USER ROUTES (Admin + Customer Dono Ke Liye)
-// ==========================================
-// Ye routes Admin group se BAHAR hain taake normal user ko error na aaye
+// ==========================================================
+// 2. LOGGED-IN USER ROUTES
+// ==========================================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('user.profile');
     Route::get('/my-reservations', [ReservationController::class, 'userBookings'])->name('user.reservations');
+
+    // CART & ORDERING
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::get('/payment-success', [CartController::class, 'success'])->name('payment.success');
+    Route::get('/payment-cancel', fn() => redirect()->route('cart')->with('error', 'Payment was cancelled.'))->name('payment.cancel');
+    Route::get('/order-confirmed/{id}', [CartController::class, 'showSuccess'])->name('order.confirmed');
+
+    // ORDERS
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/order/details/{id}', [OrderController::class, 'showDetails'])->name('orders.details');
 });
 
 
-// Cart ke mukammal routes
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-// Add Item (Plus Button)
-Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-// Update Item
-Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
-// Remove Item
-Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-// Stripe Checkout ka route
-Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
-// Success Page (Checkout ke baad)
-Route::get('/payment-success', [CartController::class, 'success'])->name('payment.success');
-
-// Agar user payment cancel karke wapis aaye toh kahan jaye
-Route::get('/payment-cancel', function () {
-    return redirect()->route('cart')->with('error', 'Payment was cancelled.');
-})->name('payment.cancel');
-
-// Success Page ke liye naya route (Order Confirmation)
-Route::get('/order-confirmed/{id}', [CartController::class, 'showSuccess'])->name('order.confirmed');
-
-
-// Saare orders ki list dekhne ke liye
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-
-// Ek specific order ki details dekhne ke liye
-Route::get('/order/details/{id}', [OrderController::class, 'showDetails'])->name('orders.details');
-
-// ==========================================
-// 3. ADMIN PROTECTED ROUTES (Sirf Admin Ke Liye)
-// ==========================================
+// ==========================================================
+// 3. ADMIN PROTECTED ROUTES
+// ==========================================================
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    // Admin Dashboard Main
+    // DASHBOARD
     Route::get('/admin', [AuthController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/web/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
-    // Menu Management
+    // MENU
     Route::prefix('menu')->group(function () {
         Route::get('/add', [MenuController::class, 'index'])->name('menu.add');
         Route::post('/add', [MenuController::class, 'store']);
@@ -92,7 +73,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [MenuController::class, 'destroy'])->name('menu.delete');
     });
 
-    // Category Management
+    // CATEGORY
     Route::prefix('category')->group(function () {
         Route::get('/add', [CategoryController::class, 'index'])->name('category.add');
         Route::post('/add', [CategoryController::class, 'store']);
@@ -102,7 +83,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
     });
 
-    // Subcategory Management
+    // SUBCATEGORY
     Route::prefix('subcategory')->group(function () {
         Route::get('/add', [SubcatController::class, 'index'])->name('subcategory.add');
         Route::post('/add', [SubcatController::class, 'store']);
@@ -112,7 +93,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [SubcatController::class, 'destroy'])->name('subcategory.delete');
     });
 
-    // Workers & Chefs
+    // WORKERS
     Route::prefix('workers')->group(function () {
         Route::get('/add', [WorkersController::class, 'index'])->name('workers.add');
         Route::post('/add', [WorkersController::class, 'store']);
@@ -122,6 +103,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [WorkersController::class, 'destroy'])->name('workers.delete');
     });
 
+    // CHEFS
     Route::prefix('chef')->group(function () {
         Route::get('/add', [ChefsController::class, 'index'])->name('chef.add');
         Route::post('/add', [ChefsController::class, 'store']);
@@ -131,7 +113,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [ChefsController::class, 'destroy'])->name('chef.delete');
     });
 
-    // Events & Gallery
+    // EVENTS
     Route::prefix('events')->group(function () {
         Route::get('/add', [EventsController::class, 'index'])->name('events.add');
         Route::post('/add', [EventsController::class, 'store']);
@@ -141,6 +123,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [EventsController::class, 'destroy'])->name('events.delete');
     });
 
+    // GALLERY
     Route::prefix('gallery')->group(function () {
         Route::get('/add', [GalleryController::class, 'index'])->name('gallery.add');
         Route::post('/add', [GalleryController::class, 'store']);
@@ -150,7 +133,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', [GalleryController::class, 'destroy'])->name('gallery.delete');
     });
 
-    // Admin Reservation Control (Show & Status Update)
+    // RESERVATION (Admin)
     Route::prefix('reservation')->group(function () {
         Route::get('/show', [ReservationController::class, 'show'])->name('reservation.show');
         Route::get('/edit/{id}', [ReservationController::class, 'edit'])->name('reservation.edit');
@@ -159,13 +142,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::patch('/updateStatus/{id}', [ReservationController::class, 'updateStatus'])->name('reservation.update-status');
     });
 
-    // Contacts (Admin View)
+    // CONTACTS (Admin)
     Route::prefix('contacts')->group(function () {
         Route::get('/show', [ContactsController::class, 'show'])->name('contacts.show');
         Route::delete('/delete/{id}', [ContactsController::class, 'destroy'])->name('contacts.delete');
     });
 
-    // User Management
+    // USERS (Admin)
     Route::prefix('register')->group(function () {
         Route::get('/show', [AuthController::class, 'show'])->name('register.show');
         Route::get('/edit/{id}', [AuthController::class, 'edit'])->name('register.edit');

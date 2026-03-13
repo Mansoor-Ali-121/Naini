@@ -207,23 +207,27 @@
                             <div class="row g-4">
                                 @foreach ($sub->menus as $item)
                                     <div class="col-lg-4 col-md-6">
-                                        <div class="food-item">
-                                            <div class="food-image-wrapper">
-                                                <span class="tag-badge">Premium</span>
-                                                <img src="{{ asset('Menus/menu_picture/' . $item->menu_picture) }}"
-                                                    class="food-img">
-                                            </div>
-                                            <div class="food-info">
-                                                <h3 class="food-title">{{ $item->name }}</h3>
-                                                <p class="food-desc">{{ Str::limit($item->description, 70) }}</p>
-                                                <div class="food-footer">
-                                                    <span class="food-price">${{ number_format($item->price, 2) }}</span>
-                                                    <a href="{{ route('cart.add', $item->id) }}" class="btn-add">
-                                                        <i class="bi bi-plus-lg"></i>
-                                                    </a>
+                                        <a href="{{ route('menu.detail', $item->actual_slug) }}">
+                                            <div class="food-item">
+                                                <div class="food-image-wrapper">
+                                                    <span class="tag-badge">Premium</span>
+                                                    <img src="{{ asset('Menus/menu_picture/' . $item->menu_picture) }}"
+                                                        class="food-img">
+                                                </div>
+
+                                                <div class="food-info">
+                                                    <h3 class="food-title">{{ $item->name }}</h3>
+                                                    <p class="food-desc">{{ Str::limit($item->description, 70) }}</p>
+                                                    <div class="food-footer">
+                                                        <span
+                                                            class="food-price">${{ number_format($item->price, 2) }}</span>
+                                                        <a href="{{ route('cart.add', $item->id) }}" class="btn-add">
+                                                            <i class="bi bi-plus-lg"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @endforeach
                             </div>
